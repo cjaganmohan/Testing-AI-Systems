@@ -257,7 +257,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='/media/yuchi/345F-2D0F/',
                         help='path for dataset')
     args = parser.parse_args()
-    group_number = 5
+    group_number = 20
     for item in natsorted(os.listdir('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations')):
         if not item.startswith('.'):
             transformation_name = item

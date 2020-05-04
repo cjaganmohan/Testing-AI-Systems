@@ -18,6 +18,9 @@ from collections import deque
 from keras import backend as K
 from keras.models import model_from_json
 
+
+
+
 reload(sys)
 #sys.setdefaultencoding('utf8')
 # keras 1.2.2 tf:1.2.0
@@ -186,7 +189,7 @@ def chauffeur_reproduce(dataset_path):
         #     #print(i[0]+".jpg")
         #     filelist2.append(i[0]+".jpg")
         filelist2.append(i[0]+".jpg")
-        print(file_counter)
+        #print(file_counter)
         file_counter = file_counter+1
     yhats = []
     labels = []

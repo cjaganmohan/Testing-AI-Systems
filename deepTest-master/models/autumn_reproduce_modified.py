@@ -1,6 +1,6 @@
-#import rospy
-#from steering_node import SteeringNode
-#modified by Jagan
+# import rospy
+# from steering_node import SteeringNode
+# modified by Jagan
 
 import argparse
 import csv
@@ -28,7 +28,7 @@ class AutumnModel(object):
     def __init__(self, cnn_graph_path, lstm_json_path, cnn_weights_path, lstm_weights_path):
         sess = tf.InteractiveSession()
         saver = tf.train.import_meta_graph(cnn_graph_path)
-        saver.restore(sess, cnn_weights_path) #modified by Jagan
+        saver.restore(sess, cnn_weights_path)  # modified by Jagan
         self.cnn = tf.get_default_graph()
 
         self.fc3 = self.cnn.get_tensor_by_name("fc3/mul:0")
@@ -83,6 +83,7 @@ class AutumnModel(object):
         output = self.y.eval(feed_dict={self.x: [image], self.keep_prob: 1.0})
         return output[0][0]
 
+
 def calc_rmse(yhat, label):
     mse = 0.
     count = 0
@@ -93,14 +94,15 @@ def calc_rmse(yhat, label):
         count += 1
         predicted_steering = yhat[i]
         steering = label[i]
-        #print(predicted_steering)
-        #print(steering)
+        # print(predicted_steering)
+        # print(steering)
 
-        mse += (float(steering) - float(predicted_steering))**2.
+        mse += (float(steering) - float(predicted_steering)) ** 2.
         # print("Observed Steering Angle : " + str(steering) + " Predicted Steering Angle: " + str(
         #     predicted_steering) + " Mean square error: " + str(
         #     mse))  # Jagan
-    return (mse/count) ** 0.5
+    return (mse / count) ** 0.5
+
 
 def autumn_reproduce(dataset_path, group_num):
     # seed_inputs1 = os.path.join(dataset_path, "hmb3/")
@@ -156,18 +158,17 @@ def autumn_reproduce(dataset_path, group_num):
     filename = 'Autumn-model-group_' + group_num + '.csv'
     # print(filename)
     with open(filename, 'ab', 0) as csvfile:
-        writer = csv.writer(csvfile, delimiter=',',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)',
-                         'Predicted_steering_angle'])
+        writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)', 'Predicted_steering_angle'])
         for f in filelist1:
             seed_image = cv2.imread(os.path.join(seed_inputs1, f))
             yhat = model(seed_image)
             yhats.append(yhat)
             labels.append(truth[f])
-            if count % 500 == 0:
-                print("processed images: " + str(count) + " total: " + str(total))
-            count = count + 1
+            # if count % 500 == 0:
+            #     print("processed images: " + str(count) + " total: " + str(total))
+            # count = count + 1
+
 
         for f in filelist2:
             seed_image = cv2.imread(os.path.join(seed_inputs2, f))
@@ -181,8 +182,6 @@ def autumn_reproduce(dataset_path, group_num):
             writer.writerow([f, truth[f], str(yhat)[1:-1]])
         mse = calc_rmse(yhats, labels)
     print("mse: " + str(mse))
-
-
 
 
 if __name__ == '__main__':
@@ -205,7 +204,7 @@ if __name__ == '__main__':
     # args, unknown = parser.parse_known_args()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, help = 'path for test dataset')
+    parser.add_argument('--dataset', type=str, help='path for test dataset')
     parser.add_argument('--group')
     args = parser.parse_args()
     autumn_reproduce(args.dataset, args.group)

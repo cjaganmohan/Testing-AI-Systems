@@ -153,29 +153,30 @@ def autumn_reproduce(dataset_path):
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    filename = 'Autumn-model-group_' + group_num + '.csv'
+    #filename = 'Autumn-model-group_' + group_num + '.csv'
+    filename = 'Autumn-baseline-tf-1.12.csv'
     # print(filename)
     with open(filename, 'ab', 0) as csvfile:
+        for f in filelist1:
+            seed_image = cv2.imread(os.path.join(seed_inputs1, f))
+            yhat = model(seed_image)
+            yhats.append(yhat)
+            labels.append(truth[f])
+            if count % 500 == 0:
+                print ("processed images: " + str(count) + " total: " + str(total))
+            count = count + 1
 
-    for f in filelist1:
-        seed_image = cv2.imread(os.path.join(seed_inputs1, f))
-        yhat = model(seed_image)
-        yhats.append(yhat)
-        labels.append(truth[f])
-        if count % 500 == 0:
-            print ("processed images: " + str(count) + " total: " + str(total))
-        count = count + 1
+        for f in filelist2:
+            seed_image = cv2.imread(os.path.join(seed_inputs2, f))
+            yhat = model(seed_image)
+            yhats.append(yhat)
+            labels.append(truth[f])
+            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat)[1:-1])
+            # if count % 500 == 0:
+            #     print("processed images: " + str(count) + " total: " + str(total))
+            # count = count + 1
+            #writer.writerow([f, truth[f], str(yhat)[1:-1]])
 
-    for f in filelist2:
-        seed_image = cv2.imread(os.path.join(seed_inputs2, f))
-        yhat = model(seed_image)
-        yhats.append(yhat)
-        labels.append(truth[f])
-        print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat)[1:-1])
-        # if count % 500 == 0:
-        #     print("processed images: " + str(count) + " total: " + str(total))
-        # count = count + 1
-        writer.writerow([f, truth[f], str(yhat)[1:-1]])
     mse = calc_rmse(yhats, labels)
     print("mse: " + str(mse))
 

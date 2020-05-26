@@ -2,7 +2,8 @@
 
 import argparse
 import os
-from natsort import natsorted, ns
+from natsort import natsorted
+
 
 def sort_and_print_file_names(filedir):
     for file in natsorted(os.listdir(filedir)):

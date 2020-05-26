@@ -1,7 +1,5 @@
 from __future__ import print_function
 import os
-import argparse
-from natsort import natsort, ns
 import csv
 import shutil
 

@@ -14,9 +14,15 @@ from keras.models import model_from_json
 from natsort import natsorted, ns
 from ncoverage import NCoverage
 from scipy import misc
+import tensorflow as tf
+import time
+from datetime import datetime
+
+os.environ["CUDA_VISIBLE_DEVICES"]="0,1" #To use multiple GPU's
 
 reload(sys)
 sys.setdefaultencoding('utf8')
+
 # keras 1.2.2 tf:1.2.0
 # file modified by Jagan....
 
@@ -86,9 +92,11 @@ class ChauffeurModel(object):
         img = ((img-(255.0/2))/255.0)
         img1 = img
         # apply feature extractor
+        start_time = datetime.now() # Jagan
         img = self.encoder.predict_on_batch(img.reshape((1, 120, 320, 3)))
-
-        # initial fill of timesteps
+        end_time = datetime.now() #Jagan
+        print('Model Prediction time', str(end_time-start_time))
+         # initial fill of timesteps
         if not len(steps):
             for _ in xrange(self.timesteps):
                 steps.append(img)
@@ -119,6 +127,8 @@ class ChauffeurModel(object):
         return cnn_ndict, cnn_covered_neurons, cnn_total_neurons, lstm_ndict,\
         lstm_covered_neurons, lstm_total_neurons,\
         self.lstm.predict_on_batch(self.timestepped_x)[0, 0] / self.scale
+
+
 
     #return predict_fn
 
@@ -195,11 +205,11 @@ metrics.rmse = rmse
 def chauffeur_testgen_coverage(dataset_path,transformation_name, directory_name, group_number):
 
     #Jagan changes starts
-    csv_filename = 'Chauffeur-' + '_Group' + str(group_number) + transformation_name + '_Neuron-Coverage.csv'
-    txt_filename = 'Chauffeur-' + '_Group' + str(group_number) + transformation_name + '_Neuron-Coverage.txt'
+    csv_filename = 'Chauffeur-' + 'Group_' + str(group_number) +'_' + str(transformation_name) + '_Neuron-Coverage.csv'
+    txt_filename = 'Chauffeur-' + 'Group_' + str(group_number) +'_' + str(transformation_name) + '_Neuron-Coverage.txt'
 
-    save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
-                          '/Subject_Image_transformed_coverage/Grp' + str(
+    save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+                          '/Subject_Image_Transformed_Coverage/Grp' + str(
         group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
     #Jagan changes ends
@@ -218,9 +228,9 @@ def chauffeur_testgen_coverage(dataset_path,transformation_name, directory_name,
 
     #seed_inputs1 = os.path.join(dataset_path, "hmb3/")
     #seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
-    #seed_inputs1 = os.path.join(dataset_path, "center/")
-    seed_inputs1 = os.path.join(dataset_path, "testdata/")
-    seed_labels1 = os.path.join(dataset_path, "testdata/test_steering.csv")
+    #seed_inputs2 = os.path.join(dataset_path, "center/")
+    seed_inputs1 = os.path.join(dataset_path, "testData/")
+    seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
     seed_inputs2 = os.path.join(dataset_path, "center-copy/")
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
 
@@ -265,7 +275,7 @@ def chauffeur_testgen_coverage(dataset_path,transformation_name, directory_name,
         file_counter = file_counter + 1
 
     # Jagan code changes
-    filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject_Image_transformed_coverage/Grp' + str(
+    filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject_Image_Transformed_Coverage/Grp' + str(
         group_number) + '/' + csv_filename
 
     #seed inputs
@@ -357,11 +367,22 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, default='/media/yuchi/345F-2D0F/',
                         help='path for dataset')
-    args = parser.parse_args()
-    group_number = 2
-    for item in natsorted(
-            os.listdir('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndiTransformations')):
-        if not item.startswith('.'):
-            transformation_name = item
-            directory_name = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndiTransformations' + "/" + transformation_name + "/"
-            chauffeur_testgen_coverage(args.dataset, transformation_name, directory_name, group_number)  # updated by Jagan
+    parser.add_argument('--transformation', type=str)
+    parser.add_argument('--directory', type=str)
+    parser.add_argument('--group', type=str)
+    args, unknown = parser.parse_known_args()
+    #args = parser.parse_args()
+    print(args.dataset)
+    print(args.transformation)
+    print(args.directory)
+    print(args.group)
+    chauffeur_testgen_coverage(args.dataset, args.transformation, args.directory, args.group)
+    #args = parser.parse_args()
+    #group_number = 2
+    #chauffeur_testgen_coverage(args.dataset,'TransformedImages_Blur_Gaussian_3', '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Blur_Gaussian_3/', group_number)
+    # for item in natsorted(
+    #         os.listdir('/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations')):
+    #     if not item.startswith('.'):
+    #         transformation_name = item
+    #         directory_name = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations' + "/" + transformation_name + "/"
+    #         chauffeur_testgen_coverage(args.dataset, transformation_name, directory_name, group_number)  # updated by Jagan

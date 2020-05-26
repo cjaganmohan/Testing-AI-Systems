@@ -134,8 +134,8 @@ def chauffeur_reproduce(dataset_path, transformation_name, directory_name, group
     csv_filename = 'Chauffeur-' + transformation_name + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Chauffeur-' + transformation_name + '_Group' + str(group_number) + '.txt'
 
-    save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
-                          '/Subject_Image_transformed/Grp' + str(
+    save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+                          '/Subject_Image_Transformed/Grp' + str(
         group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
 
@@ -219,7 +219,7 @@ def chauffeur_reproduce(dataset_path, transformation_name, directory_name, group
     # filename = 'Rambo-model-group_' + group_num + '.csv'
 
     # fileName_subString = dataset_path[86:-1]  #modified
-    filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject_Image_transformed/Grp' + str(
+    filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject_Image_Transformed/Grp' + str(
         group_number) + '/' + csv_filename
 
     with open(filename, 'ab', 0) as csvfile:
@@ -258,11 +258,20 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, default='/media/yuchi/345F-2D0F/',
                         help='path for dataset')
-    args = parser.parse_args()
-    group_number = 20
-    for item in natsorted(
-            os.listdir('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations')):
-        if not item.startswith('.'):
-            transformation_name = item
-            directory_name = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations' + "/" + transformation_name + "/"
-            chauffeur_reproduce(args.dataset, transformation_name, directory_name, group_number)  # updated by Jagan
+    parser.add_argument('--transformation', type=str)
+    parser.add_argument('--directory', type=str)
+    parser.add_argument('--group', type=str)
+    args, unknown = parser.parse_known_args()
+    #args = parser.parse_args()
+    print(args.dataset)
+    print(args.transformation)
+    print(args.directory)
+    print(args.group)
+    chauffeur_reproduce(args.dataset, args.transformation, args.directory, args.group)
+    # group_number = 2
+    # for item in natsorted(
+    #         os.listdir('/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations')):
+    #     if not item.startswith('.'):
+    #         transformation_name = item
+    #         directory_name = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations' + "/" + transformation_name + "/"
+    #         chauffeur_reproduce(args.dataset, transformation_name, directory_name, group_number)  # updated by Jagan

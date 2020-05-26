@@ -4,7 +4,7 @@ Template python that is used for copying files/folders.
 import argparse
 import os
 import shutil
-from natsort import natsorted, ns
+from natsort import natsorted
 
 
 def createFolder(directory):

@@ -1,11 +1,10 @@
 # reference URL: https://www.life2coding.com/convert-image-frames-video-file-using-opencv-python/
 # reference URL: https://tsaith.github.io/combine-images-into-a-video-with-python-3-and-opencv-3.html
 
-import cv2
-import numpy as np
-import os
 import argparse
-from natsort import natsorted, ns
+import cv2
+import os
+from natsort import natsorted
 
 
 def convert_frames_to_video(input_Frames, videofile_location, fps):

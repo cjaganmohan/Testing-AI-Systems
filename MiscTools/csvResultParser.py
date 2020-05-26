@@ -1,7 +1,7 @@
 import argparse
 import csv
 import os
-from natsort import natsorted, ns
+from natsort import natsorted
 
 input_rows=[]
 output_file = '/Users/Jagan/Desktop/Consolidated-Grp20.csv'

@@ -1,15 +1,16 @@
 '''
-Sairam
+File to create Synthetic images -  Indiviual transformations
 
 
 '''
+import argparse
+import csv
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
-import csv
 import os
-import argparse
+from matplotlib import pyplot as plt
 from natsort import natsorted, ns
+
 
 #img = cv2.imread('img1.png', cv2.IMREAD_COLOR) #https://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_basic_image_operations_pixel_access_image_load.php
 
@@ -195,7 +196,9 @@ def modify_contrast(img, params):
 
 def modify_shear(img, params):
     rows, cols, ch = img.shape
-    factor = params*(-1.0)
+    #factor = params*(-1.0) #Bug -- identified on 05/25/2020
+    factor = params # Bug fix
+    print(factor)
     M = np.float32([[1, factor, 0], [0, 1, 0]])
     new_img = cv2.warpAffine(img, M, (cols, rows))
     return new_img

@@ -3,11 +3,12 @@ Sairam
 
 
 '''
+import csv
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
-import csv
 import os
+from matplotlib import pyplot as plt
+
 #img = cv2.imread('img1.png', cv2.IMREAD_COLOR) #https://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_basic_image_operations_pixel_access_image_load.php
 
 # 1479425660620933516.jpg -- [-0.9, <-0.8] - Group 2
@@ -32,96 +33,157 @@ import os
 # 1479425653569688917.jpg -- [0.9, <1.0]
 
 #ImageTransformations/1479425751884901474.jpg
-input_file_name = '1479425441182877835.jpg'
-input_file_actual_steering_value = '-0.0169280299332'
+input_file_name = '1479425660620933516.jpg'
+input_file_actual_steering_value = '-0.861819820632'
 img = cv2.imread(input_file_name)
 
 print (img.shape)
 #print (img[440,350])
-rows = 480
-cols = 640
+#rows = 480
+#cols = 640
 
 
 def image_blur(img,blur):
     blur_type = blur[0]
     blur_value = int(blur[1])
+    if (blur_type == 'B0'):  # Do Not apply blur
+        return img
     if(blur_type == 'B1'):  #Averaging blur
         averaging_blur_image = cv2.blur(img, (blur_value, blur_value))
         #print('average')
         return averaging_blur_image
     if (blur_type == 'B2'):  #Gaussian blur
-        gaussian_blur_image = cv2.GaussianBlur(img, (blur_value, blur_value), cv2.BORDER_DEFAULT)
+        gaussian_blur_image = cv2.GaussianBlur(img, (blur_value, blur_value), 0)
         #print('gaussian')
         return gaussian_blur_image
     if (blur_type == 'B3'):  #Median blur
         median_blur = cv2.medianBlur(img, blur_value)
         #print('median')
         return median_blur
+    if (blur_type == 'B4'):  #Bilateral blur
+        bilateral_blur = cv2.bilateralFilter(img, 9, 75, 75)
+        #print('Bilateral-blur')
+        return bilateral_blur
 
 
-def image_brightness_and_contrast(img, beta, alpha):
-    adjusted_brightness_and_contrast = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
-    return adjusted_brightness_and_contrast
+# def image_brightness_and_contrast(img, beta, alpha):
+#     adjusted_brightness_and_contrast = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
+#     return adjusted_brightness_and_contrast
 
-def image_rotation(img, rotating_angle):
-    #print(img.shape)
-    height_original_image = int(img.shape[0])
-    width_original_image = int(img.shape[1])
-    #print(rotating_angle)
-    #rotating_angle = 0
-    #print(rotating_angle)
-    center_position_of_the_image = (width_original_image / 2, height_original_image / 2)
-    scale = 1.0  # rotate a given image WHILE retaining the image size
-    M = cv2.getRotationMatrix2D(center_position_of_the_image, rotating_angle, scale)
-    rotated_image = cv2.warpAffine(img, M, (width_original_image, height_original_image))
-    return rotated_image
+def image_brightness(img, param):
+    if(param != 0):
+        new_img = cv2.add(img, param)  # new_img = img*alpha + beta
+        return new_img
+    if(param == 0):
+        return img
+
+
+def image_contrast(img, params):
+    if(params != 0.0):
+        alpha = params
+        new_img = cv2.multiply(img, np.array([alpha]))  # mul_img = img*alpha
+        return new_img
+    if(params == 0.0):
+        return img
+
+
+# def image_rotation(img, rotating_angle):
+#     #print(img.shape)
+#     height_original_image = int(img.shape[0])
+#     width_original_image = int(img.shape[1])
+#     #print(rotating_angle)
+#     #rotating_angle = 0
+#     #print(rotating_angle)
+#     center_position_of_the_image = (width_original_image / 2, height_original_image / 2)
+#     scale = 1.0  # rotate a given image WHILE retaining the image size
+#     M = cv2.getRotationMatrix2D(center_position_of_the_image, rotating_angle, scale)
+#     rotated_image = cv2.warpAffine(img, M, (width_original_image, height_original_image))
+#     return rotated_image
+
+def image_rotation(img, params):
+    if (params != 0):
+        rows, cols, ch = img.shape
+        M = cv2.getRotationMatrix2D((cols / 2, rows / 2), params, 1)
+        new_img = cv2.warpAffine(img, M, (cols, rows))
+        return new_img
+    if (params == 0):
+        return img
+
+
+# def image_scale(img, scale_percent):
+#     #print(img.shape, scale_percent)
+#     width = int(img.shape[1] * scale_percent / 100)  # img.shape --> height * width
+#     height = int(img.shape[0] * scale_percent / 100)
+#     scaled_image_dimension = (width, height)
+#     # resizing the image
+#     resized_image = cv2.resize(img, scaled_image_dimension, interpolation=cv2.INTER_AREA)
+#     #print(type(resized_image))
+#     return resized_image
 
 def image_scale(img, scale_percent):
-    #print(img.shape, scale_percent)
-    width = int(img.shape[1] * scale_percent / 100)  # img.shape --> height * width
-    height = int(img.shape[0] * scale_percent / 100)
-    scaled_image_dimension = (width, height)
-    # resizing the image
-    resized_image = cv2.resize(img, scaled_image_dimension, interpolation=cv2.INTER_AREA)
-    #print(type(resized_image))
-    return resized_image
+    if(scale_percent != 0.0):
+        new_img = cv2.resize(img, None, fx=scale_percent, fy=scale_percent, interpolation=cv2.INTER_CUBIC)
+        return new_img
+    if(scale_percent == 0.0):
+        return img
 
-def image_shear(img, shearing_value):
-    shear_type = shearing_value[0]
-    shear = float(shearing_value[1])
-    height_original_image = int(img.shape[0])
-    width_original_image = int(img.shape[1])
-    if(shear_type == 'HS'):
-        M2 = np.float32([[1, shear, 0], [0, 1, 0]])
-        #print(shear)
-        h_shear_image = cv2.warpAffine(img, M2, (
-        width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-        return h_shear_image
-    # if (shear_type == 'VS'):
-    #     M2 = np.float32([[1, shear, 0], [0, 1, 0]])
-    #     #print(shear)
-    #     v_shear_image = cv2.warpAffine(img, M2, (
-    #         width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-    #     return v_shear_image
+# def image_shear(img, shearing_value):
+#     shear_type = shearing_value[0]
+#     shear = float(shearing_value[1])
+#     height_original_image = int(img.shape[0])
+#     width_original_image = int(img.shape[1])
+#     if(shear_type == 'HS'):
+#         M2 = np.float32([[1, shear, 0], [0, 1, 0]])
+#         #print(shear)
+#         h_shear_image = cv2.warpAffine(img, M2, (
+#         width_original_image, height_original_image))  # 3rd argument -- size of the output image...
+#         return h_shear_image
+#     # if (shear_type == 'VS'):
+#     #     M2 = np.float32([[1, shear, 0], [0, 1, 0]])
+#     #     #print(shear)
+#     #     v_shear_image = cv2.warpAffine(img, M2, (
+#     #         width_original_image, height_original_image))  # 3rd argument -- size of the output image...
+#     #     return v_shear_image
+
+def image_shear(img, params):
+    if (params[1] != 0.0):
+        rows, cols, ch = img.shape
+        factor = float(params[1])*(-1.0)
+        M = np.float32([[1, factor, 0], [0, 1, 0]])
+        new_img = cv2.warpAffine(img, M, (cols, rows))
+        return new_img
+    if (params[1] == 0.0):
+        return img
 
 
-def image_translation(img, translation):
-    height_original_image = int(img.shape[0])
-    width_original_image = int(img.shape[1])
-    M1 = np.float32([[1, 0, translation], [0, 1, translation]])
-    translated_image = cv2.warpAffine(img, M1, (
-    width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-    return translated_image
+# def image_translation(img, translation):
+#     height_original_image = int(img.shape[0])
+#     width_original_image = int(img.shape[1])
+#     M1 = np.float32([[1, 0, translation], [0, 1, translation]])
+#     translated_image = cv2.warpAffine(img, M1, (
+#     width_original_image, height_original_image))  # 3rd argument -- size of the output image...
+#     return translated_image
 
-input_test_file = 'Udacity-Self-Driving-output-deepTest-parameterValues.csv'
-output_file = 'final_evaluation.csv'
+def image_translation(img, params):
+    if(params != 0):
+        rows, cols, ch = img.shape
+        # M1 = np.float32([[1, 0, translation], [0, 1, translation]])
+        M = np.float32([[1, 0, params], [0, 1, params]])
+        new_img = cv2.warpAffine(img, M, (cols, rows))
+        return new_img
+    if(params == 0):
+        return img
+
+
+input_test_file = '/Users/Jagan/Desktop/Udacity-Self-Driving-2-way-with-base-choices.csv'
+output_file = '/Users/Jagan/Desktop/final_evaluation_2-way.csv'
 
 with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_csv_file:
 #with open(input_test_file) as input_csv_file:
     readCSV = csv.reader(input_csv_file, delimiter=',')
     writeCSV = csv.writer(output_csv_file, delimiter=',' , quotechar='|', quoting=csv.QUOTE_MINIMAL)
     writeCSV.writerow(['frame_id', 'steering_angle'])  # header information for the output.csv file
-    path = './outputImages'
+    path = '/Users/Jagan/Desktop/2-way/'
     counter = 1
     next(readCSV) # skip the header in input CSV file
     for row in readCSV:
@@ -139,8 +201,9 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         translation = int(row[6])
 
         blur_applied_image = image_blur(img,blur)
-        brightness_and_contrast_adjusted_image = image_brightness_and_contrast(blur_applied_image, beta, alpha)
-        rotation_applied_image = image_rotation(brightness_and_contrast_adjusted_image, rotation_angle)
+        brightness_applied_image = image_brightness(blur_applied_image, beta )
+        contrast_applied_image = image_contrast(brightness_applied_image, alpha)
+        rotation_applied_image = image_rotation(contrast_applied_image, rotation_angle)
         scaling_applied_image = image_scale(rotation_applied_image, scaling_percent_size)
         shearing_applied_image = image_shear (scaling_applied_image,shearing_k_value)
         translation_applied_image = image_translation (shearing_applied_image, translation)
@@ -156,7 +219,7 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         #fileName_withExtension = imageNumber[0]+ '_' + str(counter) + '.jpg'
         fileName = imageNumber[0]+ '_' + str(counter)
         fileName_withExtension = fileName + fileExtension
-        outputFileDestination = './outputImages/'+fileName_withExtension
+        outputFileDestination = '/Users/Jagan/Desktop/2-way/'+fileName_withExtension
         print(imageNumber[0]+ '_' + str(counter))
         cv2.imwrite(outputFileDestination,translation_applied_image)
         counter = counter+1

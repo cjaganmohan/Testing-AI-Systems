@@ -123,27 +123,24 @@ def calc_rmse(yhat, label):
 
 
 def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
-    # seed_inputs1 = os.path.join(dataset_path, "hmb3/")
-    # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
-    # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
-    # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
 
-    # Jagan changes starts sourceLocation = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches
-    # /IndividualTransformations/'+var1+str(i[0])+".jpg" destination =
-    # '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/' +  var2 + '/center-copy/'
     csv_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.txt'
 
-    save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+    # save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+    #                       '/t-way/Grp' + str(
+    #     group_number) + '/' + txt_filename
+    save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
                           '/t-way/Grp' + str(
         group_number) + '/' + txt_filename
+
     sys.stdout = open(save_console_output, 'w')
 
     # Jagan changes ends
 
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
-    seed_inputs2 = os.path.join(dataset_path, "center/")  # minor change to accomodate the experimental setup
+    seed_inputs2 = os.path.join(dataset_path, "center-new/")  # minor change to accomodate the experimental setup
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
     cnn_json_path = "./cnn.json"
     cnn_weights_path = "./cnn.weights"
@@ -162,7 +159,6 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
 
     model = make_predictor()
     # print(model.summary())  # added by Jagan
-    # print("Prediction results from Chauffer-model")  # Jagan
     print('Prediction results from Chauffer-model--' + file_name + '_Group' + str(group_number))
     filelist1 = []
     for image_file in sorted(os.listdir(seed_inputs1)):
@@ -188,21 +184,9 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
     for i in label2:
         truth[i[0] + ".jpg"] = i[1]
         if file_counter % 100 == 0:
-            # if file_counter%100 == 0 and i[2]!=0:
-            # print(i[1] +",,,,"+ i[2])
-            # print('Adding the transformed image for group '+ str(i[2]))
-            testImage_SourceLocation = directory_name
-            # print('Copying the transformed image for group '+ str(i[2])+ ' from  '+ testImage_SourceLocation)
-            #print('Copying the transformed image for group from  ' + testImage_SourceLocation)
 
-            # destination = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndTransformations/Consolidated/center/'
-            # destination = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp3_1767_1867/center-copy/'
-            #destination = dataset_path + 'center/'
-            #shutil.copy(testImage_SourceLocation, destination)
-            # print('Copying the transformed image ---' + i[0] +' for group ' + str(i[2]) + ' completed')
-            print('Copying the transformed image ---' + i[0] + ' for group completed')
             #filelist2.append(i[0] + ".jpg")
-            print(file_name)
+            print('Replacing ' + i[0] + ".jpg" + '---- with ----' + file_name + '    in the queue')
             filelist2.append(file_name)
         else:
             # print(i[0]+".jpg")
@@ -215,13 +199,9 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    # print(dataset_path[85:125]) --  /TransformedImages_Brightness_20_Group_2
-    # print(dataset_path[86:124])  -- TransformedImages_Brightness_20_Group_
-    # print(len(dataset_path))  -- length 126
-    # filename = 'Rambo-model-group_' + group_num + '.csv'
-
-    # fileName_subString = dataset_path[86:-1]  #modified
-    filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
+    # filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
+    filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
         group_number) + '/' + csv_filename
 
     with open(filename, 'ab', 0) as csvfile:
@@ -229,29 +209,15 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)',
                          'Predicted_steering_angle'])
-        for f in filelist1:
-            seed_image = cv2.imread(os.path.join(seed_inputs1, f))
-            # pdb.set_trace()
-            yhat = model(seed_image)
-            yhats.append(yhat)
-            labels.append(truth[f])
-            if count % 500 == 0:
-                print("processed images: " + str(count) + " total: " + str(total))
-            count = count + 1
 
         for f in filelist2:
             seed_image = cv2.imread(os.path.join(seed_inputs2, f))
-            # pdb.set_trace()
-            print("jagan" + f)
-            print(seed_image)
+            print("jagan ----------     " + f)
             yhat = model(seed_image)
             yhats.append(yhat)
-            labels.append(truth[f])
-            print("filename: " + f + " truth_value: " + truth[f] + " yhat_value: " + str(yhat))  # Jagan
-            # if count % 500 == 0:
-            # print ("processed images: " + str(count) + " total: " + str(total))
+            print("filename: " + f + " truth_value: -----------"  + " yhat_value: " + str(yhat))  # Jagan
             count = count + 1
-            writer.writerow([f, truth[f], str(yhat)])
+            writer.writerow([f, '----', str(yhat)])
         mse = calc_rmse(yhats, labels)
         # writer.writerow(mse)
     print("rmse: " + str(mse))
@@ -266,16 +232,10 @@ if __name__ == '__main__':
     parser.add_argument('--directory', type=str)
     parser.add_argument('--group', type=str)
     args, unknown = parser.parse_known_args()
+    print('Calling the model now ----- ')
     #args = parser.parse_args()
-    print(args.dataset)
-    print(args.transformation)
-    print(args.directory)
-    print(args.group)
+    #print(args.dataset)
+    #print(args.transformation)
+    #print(args.directory)
+    #print(args.group)
     chauffeur_reproduce(args.dataset, args.transformation, args.directory, args.group)
-    # group_number = 2
-    # for item in natsorted(
-    #         os.listdir('/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations')):
-    #     if not item.startswith('.'):
-    #         transformation_name = item
-    #         directory_name = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations' + "/" + transformation_name + "/"
-    #         chauffeur_reproduce(args.dataset, transformation_name, directory_name, group_number)  # updated by Jagan

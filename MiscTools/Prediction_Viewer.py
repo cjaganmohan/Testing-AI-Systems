@@ -113,6 +113,7 @@ def draw_path_on(img, speed_ms, angle_steers, color=(0, 0, 255)):
     draw_path(img, path_x, path_y, color)
 
 
+
 # ***** main loop *****
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Path viewer')
@@ -128,9 +129,9 @@ if __name__ == "__main__":
     print(img_list[0])
 
     input_img = cv2.imread('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp2_4289_4389/center/1479425660620933516.jpg')
-    print(type(input_img))
-    df_test = pd.read_csv('/Users/Jagan/Desktop/Grp2.csv', usecols=['frame_id', 'predicted_angle'], index_col=None)
-    df_truth = pd.read_csv('/Users/Jagan/Desktop/Grp2.csv', usecols=['frame_id', 'ground_truth'], index_col=None)
+
+    df_test = pd.read_csv('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv', usecols=['frame_id', 'predicted_angle'], index_col=None)
+    df_truth = pd.read_csv('/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv', usecols=['frame_id', 'ground_truth'], index_col=None)
 
 
     red = (255, 0, 0)
@@ -150,16 +151,14 @@ if __name__ == "__main__":
         predicted_steers = df_test['predicted_angle'].loc[i]
         actual_steers = df_truth['ground_truth'].loc[i]
 
-        #print(predicted_steers)
-        #print(actual_steers)
+        print(predicted_steers)
+        print(actual_steers)
 
-
-        draw_path_on(img, speed_ms, actual_steers / 5.0)
-        draw_path_on(img, speed_ms, predicted_steers / 5.0, (255, 0, 0))
-
+        draw_path_on(img, speed_ms, actual_steers/5.0)
+        draw_path_on(img, speed_ms, predicted_steers/5.0, red)
 
         # draw on
-        #pygame.surfarray.blit_array(camera_surface, img.swapaxes(0, 1))
+        pygame.surfarray.blit_array(camera_surface, img.swapaxes(0, 1))
         camera_surface_2x = pygame.transform.scale2x(camera_surface)
         screen.blit(camera_surface_2x, (0, 0))
         pygame.display.flip()

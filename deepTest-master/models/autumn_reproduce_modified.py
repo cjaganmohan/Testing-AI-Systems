@@ -175,7 +175,7 @@ def autumn_reproduce(dataset_path, group_num):
             yhat = model(seed_image)
             yhats.append(yhat)
             labels.append(truth[f])
-            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat)[1:-1])
+            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat))
             # if count % 500 == 0:
             #     print("processed images: " + str(count) + " total: " + str(total))
             # count = count + 1

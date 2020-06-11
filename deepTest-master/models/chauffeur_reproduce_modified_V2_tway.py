@@ -127,12 +127,12 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
     csv_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.txt'
 
-    # save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
-    #                       '/t-way/Grp' + str(
-    #     group_number) + '/' + txt_filename
-    save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+    save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
                           '/t-way/Grp' + str(
         group_number) + '/' + txt_filename
+    # save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+    #                       '/t-way/Grp' + str(
+    #     group_number) + '/' + txt_filename
 
     sys.stdout = open(save_console_output, 'w')
 
@@ -140,7 +140,7 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
 
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
-    seed_inputs2 = os.path.join(dataset_path, "center-new/")  # minor change to accomodate the experimental setup
+    seed_inputs2 = os.path.join(dataset_path, "center/")  # minor change to accomodate the experimental setup
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
     cnn_json_path = "./cnn.json"
     cnn_weights_path = "./cnn.weights"
@@ -199,10 +199,10 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    # filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
-    #     group_number) + '/' + csv_filename
-    filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
+    filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
         group_number) + '/' + csv_filename
+    # filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
 
     with open(filename, 'ab', 0) as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
@@ -212,7 +212,7 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
 
         for f in filelist2:
             seed_image = cv2.imread(os.path.join(seed_inputs2, f))
-            print("jagan ----------     " + f)
+            print("input image ----------     " + f)
             yhat = model(seed_image)
             yhats.append(yhat)
             print("filename: " + f + " truth_value: -----------"  + " yhat_value: " + str(yhat))  # Jagan

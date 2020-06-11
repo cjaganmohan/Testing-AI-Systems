@@ -5,7 +5,7 @@ from natsort import natsorted
 
 input_rows=[]
 #output_file = '/Users/Jagan/Desktop/Grp16_2way.csv'
-output_file = '/Users/Jagan/Desktop/Grp4_NeuronCoverage.csv'
+output_file = '/Users/Jagan/Desktop/Rambo_Prediction-in-Batches_Grp20.csv'
 
 
 def sort_and_print_file_names(filedir):
@@ -21,13 +21,14 @@ def sort_and_print_file_names(filedir):
                 next(inputCSV) #skip the header (row # 1)
                 file_counter = 1
                 for row in inputCSV:
-                    if file_counter == 100:
+                    if file_counter == 3:
                         #print(row[0])
                         #print(row[1])
                         #writeCSV.writerow([file, row[0], row[1], row[3], row[4],row[5], row[7], row[8], row[9]])
-                        writeCSV.writerow([file, row[0], row[1], row[3], row[4],row[5]])
-                        #writeCSV.writerow([row[0], file, row[2], row[1]])
+                        #writeCSV.writerow([file, row[0], row[1], row[3], row[4],row[5]])
+                        writeCSV.writerow([row[0], file, row[2], row[1]])
                         #writeCSV.writerow([row[0], row[2]])
+                        #writeCSV.writerow([row[0], row[1], row[2]])
                     file_counter = file_counter+1
                     # input_rows.append(row)
                     # input_rows.append(file)

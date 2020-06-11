@@ -16,8 +16,8 @@ def createFolder(directory):
 
 def copyFilesAndFolder(rootDir, sourceFileDirectory):
 
-    source_file1 = sourceFileDirectory + '/final_evaluation.csv'
-    print(source_file1)
+    # source_file1 = sourceFileDirectory + '/final_evaluation.csv'
+    # print(source_file1)
     source_file2 = sourceFileDirectory + '/testData/test_steering.csv'
     print(source_file2)
     subDir =[]
@@ -35,7 +35,7 @@ def copyFilesAndFolder(rootDir, sourceFileDirectory):
         createFolder(destination_folder_with_testData)
         # print(destination_folder_with_testData)
         # print(destination_folder)
-        shutil.copy(source_file1,destination_folder)
+        #shutil.copy(source_file1,destination_folder)
         shutil.copy(source_file2,destination_folder_with_testData)
 
 def printFolderInfo(rootDir):  # Logic to print the list of files for a given folder
@@ -50,8 +50,8 @@ def printFolderInfo(rootDir):  # Logic to print the list of files for a given fo
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', type=str,help="path for input directory")
-    #parser.add_argument('--source', type=str, help="path for source file directory")
+    parser.add_argument('--source', type=str, help="path for source file directory")
     args, unknown = parser.parse_known_args()
     #print(args.input)
-    #copyFilesAndFolder(args.input, args.source)
+    copyFilesAndFolder(args.input, args.source)
     #printFolderInfo(args.input)

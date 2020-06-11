@@ -34,9 +34,9 @@ from matplotlib import pyplot as plt
 
 
 #ImageTransformations/1479425751884901474.jpg
-group = 20
-input_file_name = '1479425653569688917.jpg'
-input_file_actual_steering_value = '0.939273793505'
+group = 2
+input_file_name = '1479425660620933516.jpg'
+input_file_actual_steering_value = '0.4570659'
 img = cv2.imread(input_file_name)
 
 print (img.shape)
@@ -150,7 +150,8 @@ def image_scale(img, scale_percent):
 def image_shear(img, params):
     if (params[1] != 0.0):
         rows, cols, ch = img.shape
-        factor = float(params[1])*(-1.0)
+        #factor = float(params[1])*(-1.0)
+        factor = float(params[1])
         M = np.float32([[1, factor, 0], [0, 1, 0]])
         new_img = cv2.warpAffine(img, M, (cols, rows))
         return new_img
@@ -177,8 +178,8 @@ def image_translation(img, params):
         return img
 
 
-input_test_file = '/Users/Jagan/Desktop/Udacity-Self-Driving-2-way-with-base-choices.csv'
-output_file = '/Users/Jagan/Desktop/final_evaluation_2-way_Grp'+str(group) +'.csv'
+input_test_file = '/Users/Jagan/Desktop/self-driving-car-project/t-way/testFiles/Threshold_0.1/Udacity-Self-Driving-Rambo_Threshold_0.1_Grp2.csv'
+output_file = '/Users/Jagan/Desktop/Rambo_2-way_Grp'+str(group) +'.csv'
 
 with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_csv_file:
 #with open(input_test_file) as input_csv_file:
@@ -187,7 +188,14 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
     writeCSV.writerow(['frame_id', 'steering_angle'])  # header information for the output.csv file
     #path = '/Users/Jagan/Desktop/2-way/Grp'+ str(group)+'/'
     counter = 1
-    next(readCSV) # skip the header in input CSV file
+    ''' to skip first seven rows in ACTS file, calling next() for seven times'''
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV) # skip a row in input CSV file
+    next(readCSV)
     for row in readCSV:
         #print(row)
         #print(row[0])
@@ -198,7 +206,7 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         alpha = float(row [2]) # Contrast control (1.0-3.0)
         rotation_angle = int(row [3])
         scaling_percent_size = float(row[4])  # MODIFIED BY JAGAN TO ACCOMADATE DEEPTEST BASED PARAMETER VALUES
-        shearing_k_value = str(row[5]).split(':')  # [shearing_type, shearing_value]
+        shearing_k_value = str(row[5]).split(':-')  # [shearing_type, shearing_value]
         #print(shearing_k_value)
         translation = int(row[6])
 
@@ -221,7 +229,7 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         #fileName_withExtension = imageNumber[0]+ '_' + str(counter) + '.jpg'
         fileName = imageNumber[0]+ '_' + str(counter) + '_Grp'+str(group) +'_2way'
         fileName_withExtension = fileName + fileExtension
-        outputFileDestination = '/Users/Jagan/Desktop/2-way/Grp'+str(group)+'/'+fileName_withExtension
+        outputFileDestination = '/Users/Jagan/Desktop/Rambo/2-way/Grp'+str(group)+'/'+fileName_withExtension
         print(imageNumber[0]+ '_' + str(counter))
         cv2.imwrite(outputFileDestination,translation_applied_image)
         counter = counter+1

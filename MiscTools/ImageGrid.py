@@ -11,15 +11,15 @@ from mpl_toolkits.axes_grid1 import ImageGrid
 from natsort import natsorted, ns
 
 fig = plt.figure(figsize=(11, 11))
-input_dir = '/Users/Jagan/Desktop/2-way/'
+input_dir = '/Users/Jagan/Desktop/2-way/Grp2'
 image_array= []
 
 for image_file in natsorted(os.listdir(input_dir)):
     if not image_file.startswith(".") and image_file.endswith(".jpg"):
         filename = input_dir + image_file
-        #print(filename)
+        print(filename)
         img = cv2.imread(filename)
-        # print(size)
+        #print(size)
         image_array.append(img)  # inserting the frames into an image array
 
 print(len(image_array))

@@ -34,9 +34,34 @@ from matplotlib import pyplot as plt
 
 
 #ImageTransformations/1479425751884901474.jpg
-group = 2
-input_file_name = '1479425660620933516.jpg'
-input_file_actual_steering_value = '0.4570659'
+image_list={}
+image_list={2:'1479425660620933516.jpg',
+            3: '1479425534498905778.jpg', #-0.77587604692 - - [-0.8, < -0.7] - Group3
+            4: '1479425619063583545.jpg', #-0.6527531147 -- [-0.7, <-0.6] - Group 4
+            5:'1479425660020827157.jpg', #-0.512664185019 -- [-0.6, <-0.5] - Group 5
+            6:'1479425535099058605.jpg', #-0.471813351582 -- [-0.5, <-0.4] - Group 6
+            7:'1479425496442340584.jpg', #-0.34557518363 -- [-0.4, <-0.3] - Group 7
+            8:'1479425537999541591.jpg', #-0.272028333527 -- [-0.3, <-0.2] - Group 8
+            9:'1479425719031130839.jpg', #-0.130899697542 -- [-0.2, <-0.1] - Group 9
+            10:'1479425712029955155.jpg', #-0.0572511968599 -- [-0.1, <0] -- Group 10
+            11:'1479425706078866287.jpg', #0.00872664619237 -- [0, <0.1] -- Group 11
+            12:'1479425527947728896.jpg', #0.190240889788 -- [0.1, <0.2] -- Group 12
+
+            13:'1479425468287290727.jpg', #0.269597201956 -- [0.2, <0.3] -- Group 13
+            14:'1479425470287629689.jpg', #0.383685899418 -- [0.3, <0.4] -- Group 14
+            15:'1479425499292775434.jpg', #0.423279553138 -- [0.4, <0.5] -- Group 15
+            16:'1479425488540828515.jpg', #0.518024973883 -- [0.5, <0.6] -- Group 16
+            17:'1479425652219428572.jpg', #0.661356496233 -- [0.6, <0.7] -- Group 17
+            18:'1479425654520220380.jpg', #0.738851710946 -- [0.7, <0.8] -- Group 18
+            19:'1479425654069742649.jpg', #0.877266222344 -- [0.8, <0.9] -- Group 19
+            20:'1479425653569688917.jpg', #0.939273793505 -- [0.9, <1.0] -- Group 20
+}
+threshold = 0.2
+group = 20
+print(image_list[group])
+#input_file_name = '1479425712029955155.jpg'
+input_file_name = image_list[group]
+input_file_actual_steering_value = 'dummyValue'
 img = cv2.imread(input_file_name)
 
 print (img.shape)
@@ -178,9 +203,10 @@ def image_translation(img, params):
         return img
 
 
-input_test_file = '/Users/Jagan/Desktop/self-driving-car-project/t-way/testFiles/Threshold_0.1/Udacity-Self-Driving-Rambo_Threshold_0.1_Grp2.csv'
+input_test_file = '/Users/Jagan/Desktop/self-driving-car-project/t-way_testFiles/testFiles/Threshold_'+str(threshold)+'/2-way/Udacity-Self-Driving-Rambo_Threshold_'+str(threshold)+'_Grp'+str(group)+'.csv'
+#input_test_file = '/Users/Jagan/Desktop/Udacity-Self-Driving-Rambo_Threshold_0.1_Grp'+str(group)+'.csv'
 output_file = '/Users/Jagan/Desktop/Rambo_2-way_Grp'+str(group) +'.csv'
-
+print(input_test_file)
 with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_csv_file:
 #with open(input_test_file) as input_csv_file:
     readCSV = csv.reader(input_csv_file, delimiter=',')
@@ -205,7 +231,7 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         beta =  int(row [1]) # Brightness control (0-100)
         alpha = float(row [2]) # Contrast control (1.0-3.0)
         rotation_angle = int(row [3])
-        scaling_percent_size = float(row[4])  # MODIFIED BY JAGAN TO ACCOMADATE DEEPTEST BASED PARAMETER VALUES
+        scaling_percent_size = float(row[4])  # MODIFIED BY JAGAN TO ACCOMODATE DEEP-TEST BASED PARAMETER VALUES
         shearing_k_value = str(row[5]).split(':-')  # [shearing_type, shearing_value]
         #print(shearing_k_value)
         translation = int(row[6])
@@ -227,9 +253,11 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         fileExtension='.jpg'
         imageNumber= input_file_name.split('.')
         #fileName_withExtension = imageNumber[0]+ '_' + str(counter) + '.jpg'
-        fileName = imageNumber[0]+ '_' + str(counter) + '_Grp'+str(group) +'_2way'
+        #fileName = imageNumber[0]+ '_' + str(counter) + '_Grp'+str(group) +'_2way'
+        fileName = imageNumber[0] + '_' + str(counter) + '_Grp' + str(group) + '_Thres-'+ str(threshold)+'_2way'
         fileName_withExtension = fileName + fileExtension
-        outputFileDestination = '/Users/Jagan/Desktop/Rambo/2-way/Grp'+str(group)+'/'+fileName_withExtension
+        outputFileDestination = '/Users/Jagan/Desktop/Rambo/T-'+str(threshold)+'/2-way/Grp'+str(group)+'/'+fileName_withExtension
+        #outputFileDestination = '/Users/Jagan/Desktop/trial/' + fileName_withExtension
         print(imageNumber[0]+ '_' + str(counter))
         cv2.imwrite(outputFileDestination,translation_applied_image)
         counter = counter+1

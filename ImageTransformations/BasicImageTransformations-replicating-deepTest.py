@@ -34,7 +34,7 @@ from matplotlib import pyplot as plt
 
 
 #ImageTransformations/1479425751884901474.jpg
-image_list={}
+image_list={} #
 image_list={2:'1479425660620933516.jpg',
             3: '1479425534498905778.jpg', #-0.77587604692 - - [-0.8, < -0.7] - Group3
             4: '1479425619063583545.jpg', #-0.6527531147 -- [-0.7, <-0.6] - Group 4

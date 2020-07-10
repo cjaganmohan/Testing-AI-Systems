@@ -4,7 +4,7 @@ slash="/"
 #transformation_name=Original
 #directory_name=NA
 group_number=6
-dataset='/home/jagan/Desktop/Rambo/prediction-in-batches/Grp6_1876_1879/'
+dataset='/home/jagan/Desktop/Autumn/prediction-in-batches/Grp6_1874_1879/'
 #python2 rambo_reproduce_modified_V2.py --transformation $transformation_name --directory $directory_name --group $group_number --dataset $dataset
 #for d in $(find '/home/jagan/Desktop/IndividualTransformations/' -maxdepth 1 -type d | natsort)
 for d in $(find '/home/jagan/Desktop/Combination/Grp6/' -maxdepth 1 -type f | natsort) # test images
@@ -23,7 +23,7 @@ do
     #sudo killall -9 python
     echo $d
     cp $d $dataset/center/
-    python2 rambo_reproduce_modified_V2_tway.py --transformation $file_name --directory $directory_name --group $group_number --dataset $dataset
+    python2 autumn_reproduce_modified_V2_tway.py --transformation $file_name --directory $directory_name --group $group_number --dataset $dataset
     #sudo killall -9 python
   fi
 done

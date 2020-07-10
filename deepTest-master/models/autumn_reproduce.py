@@ -93,13 +93,13 @@ def calc_rmse(yhat, label):
         count += 1
         predicted_steering = yhat[i]
         steering = label[i]
-        #print(predicted_steering)
-        #print(steering)
+        # print(predicted_steering)
+        # print(steering)
 
-        mse += (float(steering) - float(predicted_steering))**2.
-        print("Observed Steering Angle : " + str(steering) + " Predicted Steering Angle: " + str(
-            predicted_steering) + " Mean square error: " + str(
-            mse))  # Jagan
+        mse += (float(steering) - float(predicted_steering)) ** 2.
+        # print("Observed Steering Angle : " + str(steering) + " Predicted Steering Angle: " + str(
+        #     predicted_steering) + " Mean square error: " + str(
+        #     mse))  # Jagan
     return (mse/count) ** 0.5
 
 def autumn_reproduce(dataset_path):
@@ -154,7 +154,7 @@ def autumn_reproduce(dataset_path):
     total = len(filelist1) + len(filelist2)
 
     #filename = 'Autumn-model-group_' + group_num + '.csv'
-    filename = 'Autumn-baseline-tf-1.12.csv'
+    filename = 'Autumn-baseline-tf-1.12_baseline_new.csv'
     # print(filename)
     with open(filename, 'ab', 0) as csvfile:
         for f in filelist1:
@@ -171,7 +171,7 @@ def autumn_reproduce(dataset_path):
             yhat = model(seed_image)
             yhats.append(yhat)
             labels.append(truth[f])
-            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat)[1:-1])
+            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat))
             # if count % 500 == 0:
             #     print("processed images: " + str(count) + " total: " + str(total))
             # count = count + 1

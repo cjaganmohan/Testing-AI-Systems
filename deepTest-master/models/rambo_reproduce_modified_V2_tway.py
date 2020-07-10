@@ -90,15 +90,21 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
     # transformation_name='Original'
     # directory_name='NA'
     # to save output
-    csv_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + '.csv'
-    txt_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + '.txt'
+    csv_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.csv'
+    txt_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.txt'
 
-    save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/' \
+    save_console_output = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/' \
                           'Grp' + str(group_number) + '/' + txt_filename
+    # save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/T-0.3/2-way/' \
+    #                       'Grp' + str(group_number) + '/' + txt_filename
     # save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Baseline/' \
     #                       'Grp' + str(group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
 
+    filename = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Grp' + str(
+        group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/T-0.3/2-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
 
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
@@ -106,8 +112,8 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
 
     model = Model("./final_model.hdf5", "./X_train_mean.npy")
-    #print("Prediction results from Rambo-model  ---- " + file_name + '_Group' + str(group_number))
-    print("Prediction results from Rambo-model  ---- " + file_name ) # Jagan
+    # print("Prediction results from Rambo-model  ---- " + file_name + '_Group' + str(group_number))
+    print("Prediction results from Rambo-model  ---- " + file_name)  # Jagan
     filelist1 = []
     for image_file in sorted(os.listdir(seed_inputs1)):
         if image_file.endswith(".jpg"):
@@ -151,11 +157,11 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/Grp' + str(
-        group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/T-0.2/2-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
     # filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Baseline/Grp' + str(
     #     group_number) + '/' + csv_filename
-    #print(filename)
+    # print(filename)
     with open(filename, 'ab', 0) as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -165,9 +171,9 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
         for f in filelist2:
             yhat = model.predict(os.path.join(seed_inputs2, f))
             yhats.append(yhat)
-            print("filename: " + f + " truth_value: -----------" + " yhat_value: " + str(yhat))  # Jagan
+            print("filename: " + f + " truth_value: -----------" + " yhat_value: " + str(yhat)[1:-1])  # Jagan
             count = count + 1
-            writer.writerow([f, '----', str(yhat)])
+            writer.writerow([f, '----', str(yhat)[1:-1]])
         mse = calc_rmse(yhats, labels)
 
     print("mse: " + str(mse))

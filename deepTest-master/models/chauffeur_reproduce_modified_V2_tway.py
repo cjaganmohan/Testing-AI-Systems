@@ -123,17 +123,19 @@ def calc_rmse(yhat, label):
 
 
 def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
+    csv_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + 'Combination_.csv'
+    txt_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + 'Combination_.txt'
 
-    csv_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.csv'
-    txt_filename = 'Chauffeur-' + file_name + '_Group' + str(group_number) + '.txt'
-
-    save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
-                          '/t-way/Grp' + str(
-        group_number) + '/' + txt_filename
+    save_console_output = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/' \
+                          'Grp' + str(group_number) + '/' + txt_filename
+    # save_console_output = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
+    #                       '/t-way/Grp' + str(
+    #     group_number) + '/' + txt_filename
     # save_console_output = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results' \
     #                       '/t-way/Grp' + str(
     #     group_number) + '/' + txt_filename
-
+    filename = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Grp' + str(
+        group_number) + '/' + csv_filename
     sys.stdout = open(save_console_output, 'w')
 
     # Jagan changes ends
@@ -199,8 +201,8 @@ def chauffeur_reproduce(dataset_path, file_name, directory_name, group_number):
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
-        group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
     # filename = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp' + str(
     #     group_number) + '/' + csv_filename
 

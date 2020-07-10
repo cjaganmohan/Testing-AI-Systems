@@ -19,6 +19,13 @@ from keras.models import *
 from keras.models import *
 from math import pi
 import pdb
+import sys
+import os
+import shutil
+
+reload(sys)
+sys.setdefaultencoding('ISO-8859-1')
+
 
 # from rmse import calc_rmse
 # from generator import gen
@@ -80,7 +87,7 @@ class AutumnModel(object):
         # pdb.set_trace()
         img = self.process(img)
         image = scipy.misc.imresize(img[-400:], [66, 200]) / 255.0
-        #pdb.set_trace()
+        # pdb.set_trace()
         cnn_output = self.fc3.eval(feed_dict={self.x: [image], self.keep_prob: 1.0})
         self.steps.append(cnn_output)
         if len(self.steps) > 100:
@@ -109,16 +116,36 @@ def calc_rmse(yhat, label):
     return (mse / count) ** 0.5
 
 
-def autumn_reproduce(dataset_path, group_num):
+def autumn_reproduce(dataset_path, file_name, directory_name, group_number):
     # seed_inputs1 = os.path.join(dataset_path, "hmb3/")
     # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
     # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
     # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
 
+    # csv_filename = 'Autumn-' + transformation_name + '_Group' + str(group_number) + '.csv'
+    # txt_filename = 'Autumn-' + transformation_name + '_Group' + str(group_number) + '.txt'
+
+    csv_filename = 'Autumn-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.csv'
+    txt_filename = 'Autumn-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.txt'
+
+    save_console_output = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Autumn/' \
+                          'Grp' + str(group_number) + '/' + txt_filename
+    # save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/' \
+    #                       'Grp' + str(group_number) + '/' + txt_filename
+    # save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/' \
+    #                       'Grp' + str(group_number) + '/' + txt_filename
+    sys.stdout = open(save_console_output, 'w')
+
+    filename = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Autumn/Grp' + str(
+        group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/t-way/T-0.3/2-way/Grp' + str(
+    #     group_number) + '/' + csv_filename
+
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
     seed_inputs2 = os.path.join(dataset_path, "center/")
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
+
     cnn_graph_path = "./autumn-cnn-model-tf.meta"
     cnn_weights_path = "./autumn-cnn-weights.ckpt"
     lstm_json_path = "./autumn-lstm-model-keras.json"
@@ -133,7 +160,8 @@ def autumn_reproduce(dataset_path, group_num):
 
     model = make_predictor()
     print("Tensorflow version ", tf.__version__)
-    print("Prediction results from Autumn-model")  # Jagan
+    print("Prediction results from Rambo-model" + file_name + '_Group' + str(group_number))  # Jagan
+
     filelist1 = []
     for image_file in sorted(os.listdir(seed_inputs1)):
         if image_file.endswith(".jpg"):
@@ -146,23 +174,47 @@ def autumn_reproduce(dataset_path, group_num):
         truth[i[0] + ".jpg"] = i[1]
 
     filelist2 = []
-    for image_file in sorted(os.listdir(seed_inputs2)):
-        if image_file.endswith(".jpg"):
-            filelist2.append(image_file)
+    # for image_file in sorted(os.listdir(seed_inputs2)):
+    #     if image_file.endswith(".jpg"):
+    #         filelist2.append(image_file)
+    # with open(seed_labels2, 'rb') as csvfile2:
+    #     label2 = list(csv.reader(csvfile2, delimiter=',', quotechar='|'))
+    # label2 = label2[1:]
+    #
+    # for i in label2:
+    #     truth[i[0] + ".jpg"] = i[1]
+
     with open(seed_labels2, 'rb') as csvfile2:
         label2 = list(csv.reader(csvfile2, delimiter=',', quotechar='|'))
+
     label2 = label2[1:]
+    file_counter = 1
 
     for i in label2:
         truth[i[0] + ".jpg"] = i[1]
+        if file_counter % 5 == 0:
+            # sourceLocation_transformedImage = directory_name + str(i[0]) + ".jpg"
+            # print('Copying the transformed image for group from  ' + sourceLocation_transformedImage)
+            # destination = dataset_path + 'center-copy/'
+            # shutil.copy(sourceLocation_transformedImage, destination)
+            print('Replacing ' + i[0] + ".jpg" + '---- with ----' + file_name + '    in the queue')
+            filelist2.append(file_name)
+        else:
+            filelist2.append(i[0] + ".jpg")
+        print(file_counter)
+        file_counter = file_counter + 1
 
     yhats = []
     labels = []
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    filename = 'Autumn-model-group_' + group_num + '.csv'
+    # filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/Grp' + str(
+    #     group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/Grp' + str(
+    #     group_number) + '/' + csv_filename
     # print(filename)
+
     with open(filename, 'ab', 0) as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)', 'Predicted_steering_angle'])
@@ -175,54 +227,22 @@ def autumn_reproduce(dataset_path, group_num):
             #     print("processed images: " + str(count) + " total: " + str(total))
             # count = count + 1
 
-
         for f in filelist2:
             seed_image = cv2.imread(os.path.join(seed_inputs2, f))
             yhat = model(seed_image)
             yhats.append(yhat)
-            labels.append(truth[f])
-            print(" f-value: " + f + " truth-value: " + truth[f] + " yhat-value: " + str(yhat))
-            # if count % 500 == 0:
-            #     print("processed images: " + str(count) + " total: " + str(total))
-            # count = count + 1
-            writer.writerow([f, truth[f], str(yhat)[1:-1]])
+            # labels.append(truth[f])
+            print(" f-value: " + f + " truth_value: -----------" + " yhat-value: " + str(yhat))
+            writer.writerow([f, '----', str(yhat)])
         mse = calc_rmse(yhats, labels)
     print("mse: " + str(mse))
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser(description='Model Runner for team autumn')
-    # parser.add_argument('bagfile', type=str, help='Path to ROS bag')
-    # parser.add_argument('--input', '-i', action='store', dest='input_file',
-    #                     default='example-final.csv', help='Input model csv file name')
-    # parser.add_argument('--output', '-o', action='store', dest='output_file',
-    #                     default='output-lstm.csv', help='Output csv file name')
-    # parser.add_argument('--data-dir', '--data', action='store', dest='data_dir')
-    # parser.add_argument('--cnn-graph', '--cnn-meta', action='store', dest='cnn_graph',
-    #                     default='autumn/autumn-cnn-model-tf.meta')
-    # parser.add_argument('--lstm-json', '--lstm-meta', action='store', dest='lstm_json',
-    #                     default='autumn/autumn-lstm-model-keras.json')
-    # parser.add_argument('--cnn-weights', action='store', dest='cnn_weights',
-    #                     default='autumn/autumn-cnn-weights.ckpt')
-    # parser.add_argument('--lstm-weights', action='store', dest='lstm_weights',
-    #                     default='autumn/autumn-lstm-weights.hdf5')
-    # #args = parser.parse_args()  # commented by Jagan
-    # args, unknown = parser.parse_known_args()
-
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, help='path for test dataset')
-    parser.add_argument('--group')
-    args = parser.parse_args()
-    autumn_reproduce(args.dataset, args.group)
-
-    # def make_predictor():
-    #     model = AutumnModel(args.cnn_graph, args.lstm_json, args.cnn_weights, args.lstm_weights)
-    #     return lambda img: model.predict(img)
-    #
-    # def process(predictor, img):
-    #     return predictor(img)
-    #
-    # model = make_predictor()
-    #
-    # print calc_rmse(lambda image_pred: model(image_pred),
-    #                gen(args.bagfile))
+    parser.add_argument('--dataset', type=str)
+    parser.add_argument('--transformation', type=str)
+    parser.add_argument('--directory', type=str)
+    parser.add_argument('--group', type=str)
+    args, unknown = parser.parse_known_args()
+    autumn_reproduce(args.dataset, args.transformation, args.directory, args.group)

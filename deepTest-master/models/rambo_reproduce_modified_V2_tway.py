@@ -93,7 +93,7 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
     csv_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.csv'
     txt_filename = 'Rambo-' + file_name + '_Group' + str(group_number) + 'Combination_T_0.1.txt'
 
-    save_console_output = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/' \
+    save_console_output = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Rambo/' \
                           'Grp' + str(group_number) + '/' + txt_filename
     # save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/T-0.3/2-way/' \
     #                       'Grp' + str(group_number) + '/' + txt_filename
@@ -101,7 +101,7 @@ def rambo_reproduce(dataset_path, file_name, directory_name, group_number):
     #                       'Grp' + str(group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
 
-    filename = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Grp' + str(
+    filename = '/home/jagan/Desktop/Combination/Results/T-0.1/2-way/Rambo/Grp' + str(
         group_number) + '/' + csv_filename
     # filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/t-way/T-0.3/2-way/Grp' + str(
     #     group_number) + '/' + csv_filename

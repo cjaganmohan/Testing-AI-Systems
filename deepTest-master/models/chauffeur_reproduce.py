@@ -203,7 +203,7 @@ def chauffeur_reproduce(dataset_path):
         mse = calc_rmse(yhats, labels)
 
     print("rmse: " + str(mse))
-
+    print('Print via VSCode- SSH')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

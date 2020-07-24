@@ -107,7 +107,7 @@ def autumn_reproduce(dataset_path):
     # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
     # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
     # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
-
+    dataset_path = '/home/jagan/Desktop/Autumn/prediction-in-batches/Grp2_4384_4389'
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
     seed_inputs2 = os.path.join(dataset_path, "center/")
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     # args, unknown = parser.parse_known_args()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, help = 'path for test dataset')
+    parser.add_argument('--dataset', type=str, help='path for test dataset', )
     args = parser.parse_args()
     autumn_reproduce(args.dataset)
 

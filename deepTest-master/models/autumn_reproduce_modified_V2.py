@@ -125,15 +125,15 @@ def autumn_reproduce(dataset_path, transformation_name, directory_name, group_nu
     csv_filename = 'Autumn-' + transformation_name + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Autumn-' + transformation_name + '_Group' + str(group_number) + '.txt'
 
-    # save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/' \
-    #                       'Grp' + str(group_number) + '/' + txt_filename
-    save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/' \
+    save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/' \
                           'Grp' + str(group_number) + '/' + txt_filename
+    # save_console_output = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/' \
+    #                       'Grp' + str(group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
 
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
-    seed_inputs2 = os.path.join(dataset_path, "center/")
+    seed_inputs2 = os.path.join(dataset_path, "center-copy/")
     seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
 
     cnn_graph_path = "./autumn-cnn-model-tf.meta"
@@ -182,7 +182,7 @@ def autumn_reproduce(dataset_path, transformation_name, directory_name, group_nu
 
     for i in label2:
         truth[i[0] + ".jpg"] = i[1]
-        if file_counter % 6 == 0:
+        if file_counter % 5 == 0:
             sourceLocation_transformedImage = directory_name + str(i[0]) + ".jpg"
             print('Copying the transformed image for group from  ' + sourceLocation_transformedImage)
             destination = dataset_path + 'center-copy/'
@@ -199,10 +199,10 @@ def autumn_reproduce(dataset_path, transformation_name, directory_name, group_nu
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    # filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/Grp' + str(
-    #     group_number) + '/' + csv_filename
-    filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/Grp' + str(
+    filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Individual_Transformations/Grp' + str(
         group_number) + '/' + csv_filename
+    # filename = '/home/jagan/Desktop/Autumn/prediction-in-batches/Results/Baseline/Grp' + str(
+    #     group_number) + '/' + csv_filename
     # print(filename)
 
     with open(filename, 'ab', 0) as csvfile:

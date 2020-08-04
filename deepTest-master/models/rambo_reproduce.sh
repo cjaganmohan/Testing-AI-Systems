@@ -4,7 +4,9 @@ slash="/"
 #transformation_name=Original
 #directory_name=NA
 group_number=20
+#dataset='/home/jagan/Desktop/Baseline/'
 dataset='/home/jagan/Desktop/Rambo/prediction-in-batches/Grp20_4245_4248/'
+#export KERAS_BACKEND=theano # changing the backend to Theano
 #python2 rambo_reproduce_modified_V2.py --transformation $transformation_name --directory $directory_name --group $group_number --dataset $dataset
 for d in $(find '/home/jagan/Desktop/IndividualTransformations/' -maxdepth 1 -type d | natsort)
 do
@@ -18,6 +20,7 @@ do
     echo $group_number
     echo $dataset
     #sudo killall -9 python
+    export KERAS_BACKEND=theano # changing the backend to Theano
     python2 rambo_reproduce_modified_V2.py --transformation $transformation_name --directory $directory_name --group $group_number --dataset $dataset
     #sudo killall -9 python
   fi

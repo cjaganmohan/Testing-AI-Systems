@@ -28,7 +28,7 @@ class AutumnModel(object):
     def __init__(self, cnn_graph_path, lstm_json_path, cnn_weights_path, lstm_weights_path):
         sess = tf.InteractiveSession()
         saver = tf.train.import_meta_graph(cnn_graph_path)
-        saver.restore(sess, cnn_weights_path) #modified by Jagan
+        saver.restore(sess, cnn_weights_path)  # modified by Jagan
         self.cnn = tf.get_default_graph()
 
         self.fc3 = self.cnn.get_tensor_by_name("fc3/mul:0")
@@ -36,10 +36,10 @@ class AutumnModel(object):
         self.x = self.cnn.get_tensor_by_name("x:0")
         self.keep_prob = self.cnn.get_tensor_by_name("keep_prob:0")
 
-        with open(lstm_json_path, 'r') as f:
-            json_string = f.read()
-        self.model = model_from_json(json_string)
-        self.model.load_weights(lstm_weights_path)
+        # with open(lstm_json_path, 'r') as f:
+        #    json_string = f.read()
+        # self.model = model_from_json(json_string)
+        # self.model.load_weights(lstm_weights_path)
 
         self.prev_image = None
         self.last = []
@@ -107,7 +107,7 @@ def autumn_reproduce(dataset_path):
     # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
     # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
     # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
-    dataset_path = '/home/jagan/Desktop/Autumn/prediction-in-batches/Grp2_4384_4389'
+    #dataset_path = '/home/jagan/Desktop/Autumn/prediction-in-batches/Grp2_4384_4389'
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
     seed_inputs2 = os.path.join(dataset_path, "center/")

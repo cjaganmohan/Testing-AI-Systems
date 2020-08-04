@@ -93,12 +93,12 @@ def rambo_reproduce(dataset_path, transformation_name, directory_name, group_num
     csv_filename = 'Rambo-' + transformation_name + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Rambo-' + transformation_name + '_Group' + str(group_number) + '.txt'
 
-    save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Individual_Transformations/' \
+    # save_console_output = '/home/jagan/Desktop/Rambo/Theano-backend/Results/Baseline/'+ txt_filename
+    save_console_output = '/home/jagan/Desktop/Rambo/Theano-backend/prediction-in-batches/Results/Individual_Transformations/' \
                           'Grp' + str(group_number) + '/' + txt_filename
-    # save_console_output = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Baseline/' \
+    # save_console_output = '/home/jagan/Desktop/Rambo/Theano-backend/prediction-in-batches/Results/Baseline/' \
     #                       'Grp' + str(group_number) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
-
 
     seed_inputs1 = os.path.join(dataset_path, "testData/")
     seed_labels1 = os.path.join(dataset_path, "testData/test_steering.csv")
@@ -128,14 +128,15 @@ def rambo_reproduce(dataset_path, transformation_name, directory_name, group_num
 
     for i in label2:
         truth[i[0] + ".jpg"] = i[1]
-        if file_counter % 3 == 0:
+        # filelist2.append(i[0] + ".jpg")
+        if file_counter % 3 == 0:  # Change it back to 3 while running for transformed images
             sourceLocation_transformedImage = directory_name + str(i[0]) + ".jpg"
             print('Copying the transformed image for group from  ' + sourceLocation_transformedImage)
 
             destination = dataset_path + 'center-copy/'
             shutil.copy(sourceLocation_transformedImage, destination)
 
-            print('Copying the transformed image  ---' + i[0] +' to '+ destination +'    ----- completed')
+            print('Copying the transformed image  ---' + i[0] + ' to ' + destination + '    ----- completed')
 
             filelist2.append(i[0] + ".jpg")
         else:
@@ -149,16 +150,17 @@ def rambo_reproduce(dataset_path, transformation_name, directory_name, group_num
     count = 0
     total = len(filelist1) + len(filelist2)
 
-    filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Individual_Transformations/Grp' + str(
+    # filename = '/home/jagan/Desktop/Rambo/Theano-backend/Results/Baseline/'+ csv_filename
+    filename = '/home/jagan/Desktop/Rambo/Theano-backend/prediction-in-batches/Results/Individual_Transformations/Grp' + str(
         group_number) + '/' + csv_filename
-    # filename = '/home/jagan/Desktop/Rambo/prediction-in-batches/Results/Baseline/Grp' + str(
+    # filename = '/home/jagan/Desktop/Rambo/Theano-backend/prediction-in-batches/Results/Baseline/Grp' + str(
     #     group_number) + '/' + csv_filename
-    #print(filename)
+    # print(filename)
     with open(filename, 'ab', 0) as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)' ,
-              'Predicted_steering_angle'])
+        writer.writerow(['File_name', 'Observed_steering_angle(Ground_truth)',
+                         'Predicted_steering_angle'])
         for f in filelist1:
             yhat = model.predict(os.path.join(seed_inputs1, f))
             yhats.append(yhat)

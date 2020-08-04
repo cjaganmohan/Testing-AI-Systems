@@ -4,11 +4,11 @@ slash="/"
 
 #transformation_name=Original
 #directory_name=NA
-group_number=5
-dataset='/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp5_4277_4377'
+group_number=7
+dataset='/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp7_1006_1106'
 #dataset='/home/jagan/Desktop/chauffer-deubgging/prediction-in-batches/t-way/Grp2/'
 #dataset='/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/t-way/Grp2/'
-for d in $(find '/home/jagan/Desktop/Combination/Grp5/' -maxdepth 1 -type f | natsort) # test images
+for d in $(find '/home/jagan/Desktop/Combination/Latest_Theano_Updated/Grp7/' -maxdepth 1 -type f | natsort) # test images
 #for d in $(find '/Users/Jagan/Desktop/2-way' -maxdepth 1 -type f | natsort)
 do
   file_name=$(basename $d)  # to print the folder name --- https://stackoverflow.com/a/3362952

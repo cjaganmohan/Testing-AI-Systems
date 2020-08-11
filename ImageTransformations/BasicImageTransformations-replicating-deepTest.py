@@ -56,8 +56,8 @@ image_list={2:'1479425660620933516.jpg',
             19: '1479425654069742649.jpg',  # 0.877266222344 -- [0.8, <0.9] -- Group 19
             20: '1479425653569688917.jpg',  # 0.939273793505 -- [0.9, <1.0] -- Group 20
             }
-threshold = 0.3
-group = 20
+threshold = 0.1
+group = 7
 print(image_list[group])
 #input_file_name = '1479425712029955155.jpg'
 input_file_name = image_list[group]
@@ -202,11 +202,18 @@ def image_translation(img, params):
     if(params == 0):
         return img
 
+#/Users/Jagan/Desktop/self-driving-car-project/t-way_testFiles/testFiles/Combined_Valid_Transformations
 
-input_test_file = '/home/jagan/Desktop/self-driving-car-project/t-way_testFiles/testFiles/Threshold_' + str(
-    threshold) + '/2-way/Udacity-Self-Driving-Rambo_Threshold_' + str(threshold) + '_Grp' + str(group)+'.csv'
+input_test_file = '/Users/Jagan/Desktop/self-driving-car-project/t-way_testFiles/testFiles/Combined_Valid_Transformations_latest_Theano/' \
+                  'combined_transformation_2-way_Grp' + str(group)+'.csv'
+
+# input_test_file = '/Users/Jagan/Desktop/self-driving-car-project/t-way_testFiles/testFiles/Threshold_' + str(
+#     threshold) + '/2-way/Udacity-Self-Driving-Rambo_Threshold_' + str(threshold) + '_Grp' + str(group)+'.csv'
 #input_test_file = '/Users/Jagan/Desktop/Udacity-Self-Driving-Rambo_Threshold_0.1_Grp'+str(group)+'.csv'
-output_file = '/home/jagan/Desktop/Rambo_2-way_Grp' + str(group) +'.csv'
+
+#output_file = '/home/jagan/Desktop/Rambo_2-way_Grp' + str(group) +'.csv'
+output_file = '/Users/Jagan/Desktop/dummy.csv'
+
 print(input_test_file)
 with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_csv_file:
 #with open(input_test_file) as input_csv_file:
@@ -227,7 +234,7 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         #print(row)
         #print(row[0])
         tc_info = 'Blur  '+ row[0],'Brightness   '+ row[1],'Contrast   '+row[2], 'Rotation  '+ row[3],'Scaling   '+ row[4],'Shearing   '+row[5],'Translation  '+ row[6]
-        #print(tc_info)
+        print(tc_info)
         blur = str(row[0]).split('-')  # [Blur_type, Blur_value]
         beta =  int(row [1]) # Brightness control (0-100)
         alpha = float(row [2]) # Contrast control (1.0-3.0)
@@ -254,18 +261,18 @@ with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_
         fileExtension='.jpg'
         imageNumber= input_file_name.split('.')
         #fileName_withExtension = imageNumber[0]+ '_' + str(counter) + '.jpg'
-        #fileName = imageNumber[0]+ '_' + str(counter) + '_Grp'+str(group) +'_2way'
-        fileName = imageNumber[0] + '_' + str(counter) + '_Grp' + str(group) + '_Thres-'+ str(threshold)+'_2way'
+        fileName = imageNumber[0]+ '_' + str(counter) + '_Grp'+str(group) +'_Thres-0.1_Latest_Theano_Updated_Combination_2way'
+        #fileName = imageNumber[0] + '_' + str(counter) + '_Grp' + str(group) + '_Thres-'+ str(threshold)+'_2way'
         fileName_withExtension = fileName + fileExtension
-        outputFileDestination = '/home/jagan/Desktop/Rambo/prediction-in-batches/t-way_test_inputs/T-' + str(
-            threshold) + '/2-way/Grp' + str(group) + '/' + fileName_withExtension
-        #outputFileDestination = '/Users/Jagan/Desktop/trial/' + fileName_withExtension
+        # outputFileDestination = '/home/jagan/Desktop/Rambo/prediction-in-batches/t-way_test_inputs/T-' + str(
+        #     threshold) + '/2-way/Grp' + str(group) + '/' + fileName_withExtension
+        outputFileDestination = '/Users/Jagan/Desktop/Combined/Latest_Theano_Updated/Grp'+ str(group)+'/'+ fileName_withExtension
         print(imageNumber[0]+ '_' + str(counter))
         cv2.imwrite(outputFileDestination,translation_applied_image)
         counter = counter+1
         #str(0.661356496233)
         writeCSV.writerow([fileName, input_file_actual_steering_value])
-        #np.savetxt(output_file, (tc_info,outputFileDestinationjxc7750ERB513
+        #np.savetxt(output_file, (tc_info,outputFileDestination)
 
 
     output_csv_file.close()

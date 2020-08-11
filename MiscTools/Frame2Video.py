@@ -15,7 +15,7 @@ def convert_frames_to_video(input_Frames, videofile_location, fps):
     for image_file in natsorted(os.listdir(input_Frames)):
         if not image_file.startswith(".") and image_file.endswith(".jpg"):
             filename = input_Frames + image_file
-            print(filename)
+            #print(filename)
             img = cv2.imread(filename)
             height, width, layers = img.shape
             size = (width, height)
@@ -37,7 +37,7 @@ if __name__=="__main__":
     parser.add_argument('--frames', type=str,help='path for input frames')
     parser.add_argument('--video', type=str,help='path for output (video)')
     args, unknown = parser.parse_known_args()
-    fps = 25.0
+    fps = 20.0
     #print(args.frames)
     #print(args.video)
 

@@ -33,7 +33,7 @@ def run_prediction_for_smaller_dataset(image):
     file_index = file_name.index(image)
     print(file_index)
 
-    start_index = file_index-2 # we are considering the previous (99 frames for chauffeur, 2 frames for rambo)
+    start_index = file_index-4 # we are considering the previous (99 frames for chauffeur, 2 frames for rambo)
     end_index = file_index+1 # we are incrementing the file_index to include the candidate image as well (Check how range() works in python for further explanation)
 
     for item in list_of_files[start_index:end_index]:
@@ -41,19 +41,21 @@ def run_prediction_for_smaller_dataset(image):
     return list_of_files
 
 def create_consolidated_datasets():
-    candidate_image_list = ['1479425660620933516', '1479425534498905778',
-                            '1479425619063583545', '1479425660020827157',
-                            '1479425535099058605', '1479425496442340584',
-                            '1479425537999541591', '1479425719031130839',
-                            '1479425712029955155', '1479425706078866287',
-                            '1479425527947728896', '1479425468287290727',
-                            '1479425470287629689', '1479425499292775434',
-                            '1479425488540828515', '1479425652219428572',
-                            '1479425654520220380', '1479425654069742649',
-                            '1479425653569688917']
+    # candidate_image_list = ['1479425660620933516', '1479425534498905778',
+    #                         '1479425619063583545', '1479425660020827157',
+    #                         '1479425535099058605', '1479425496442340584',
+    #                         '1479425537999541591', '1479425719031130839',
+    #                         '1479425712029955155', '1479425706078866287',
+    #                         '1479425527947728896', '1479425468287290727',
+    #                         '1479425470287629689', '1479425499292775434',
+    #                         '1479425488540828515', '1479425652219428572',
+    #                         '1479425654520220380', '1479425654069742649',
+    #                         '1479425653569688917']
+    candidate_image_list = ['1479425535099058605']
+
     global start_index
     global end_index
-    counter = 2;
+    counter = 6;
     for image in candidate_image_list:
         list_of_files = run_prediction_for_smaller_dataset(image)
 

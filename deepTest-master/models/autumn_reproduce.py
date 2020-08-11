@@ -36,10 +36,10 @@ class AutumnModel(object):
         self.x = self.cnn.get_tensor_by_name("x:0")
         self.keep_prob = self.cnn.get_tensor_by_name("keep_prob:0")
 
-        # with open(lstm_json_path, 'r') as f:
-        #    json_string = f.read()
-        # self.model = model_from_json(json_string)
-        # self.model.load_weights(lstm_weights_path)
+        with open(lstm_json_path, 'r') as f:
+            json_string = f.read()
+        self.model = model_from_json(json_string)
+        self.model.load_weights(lstm_weights_path)
 
         self.prev_image = None
         self.last = []

@@ -207,7 +207,6 @@ def chauffeur_reproduce(dataset_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='/media/yuchi/345F-2D0F/',
-                        help='path for dataset')
+    parser.add_argument('--dataset', type=str)
     args = parser.parse_args()
     chauffeur_reproduce(args.dataset)

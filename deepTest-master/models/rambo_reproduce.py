@@ -63,6 +63,15 @@ class Model(object):
             X = X.astype('float32')
             X -= self.X_mean
             X /= 255.0
+            #import pdb; pdb.set_trace() # Jagan
+            print(img_path)
+            print("--------------------")
+            file = open("./Original", "wb")
+            np.save(file,X)
+            print(img_path)
+            print("--------------------")
+            print(X)
+            file.close
             return self.model.predict(X)[0]
 
 def calc_rmse(yhat, label):
@@ -141,6 +150,7 @@ def rambo_reproduce(dataset_path,group_num):
 
         for f in filelist2:
             yhat = model.predict(os.path.join(seed_inputs2, f))
+            print(" f-value: " + f)
             yhats.append(yhat)
             labels.append(truth[f])
             print(" f-value: " + f + " truth-value: " + truth[f] +" yhat-value: " + str(yhat)[1:-1])
@@ -155,7 +165,7 @@ def rambo_reproduce(dataset_path,group_num):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, default='/media/yuchi/345F-2D0F/',
+    parser.add_argument('--dataset', type=str,
                         help='path for dataset')
     parser.add_argument('--group')
     args = parser.parse_args()

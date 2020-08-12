@@ -254,7 +254,7 @@ def performIndiviualTransformation(input_folder):
     # writing image to a folder
     fileExtension = '.jpg'
     #img = cv2.imread(input_file_name)
-    groupNumber = 5
+    groupNumber = 10
     candidate_image_list = []
 
     for file in natsorted(os.listdir(input_folder)):

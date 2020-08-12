@@ -21,7 +21,7 @@ class AutumnModel(object):
         with open(lstm_json, 'r') as f:
             json_string = f.read()
         self.model = model_from_json(json_string)
-        #self.model.load_weights(lstm_weights)
+        self.model.load_weights(lstm_weights)
 
         self.prev_image = None
         self.last = []

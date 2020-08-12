@@ -66,7 +66,7 @@ class Model(object):
             #import pdb; pdb.set_trace() # Jagan
             print(img_path)
             print("--------------------")
-            file = open("./Original", "wb")
+            file = open("./shear-0.4", "wb")
             np.save(file,X)
             print(img_path)
             print("--------------------")

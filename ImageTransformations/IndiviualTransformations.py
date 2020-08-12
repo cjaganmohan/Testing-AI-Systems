@@ -254,8 +254,8 @@ def performIndiviualTransformation(input_folder):
     # writing image to a folder
     fileExtension = '.jpg'
     #img = cv2.imread(input_file_name)
-
-    candidate_image_list=[]
+    groupNumber = 5
+    candidate_image_list = []
 
     for file in natsorted(os.listdir(input_folder)):
         if not file.startswith(".") and file.endswith(".jpg"):
@@ -268,7 +268,8 @@ def performIndiviualTransformation(input_folder):
     #Brightness
     for x in xrange(10,110,10):
         #outputDirectory = './TransformedImages_Brightness_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Brightness_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+            groupNumber) + '/TransformedImages_Brightness_' + str(x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
             input_file = input_folder+'/'+image
@@ -282,7 +283,8 @@ def performIndiviualTransformation(input_folder):
     #Rotation
     for x in xrange(3,33,3):
         #outputDirectory = './TransformedImages_Rotation_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Rotation_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Rotation_' + str(
+            x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
             input_file = input_folder + '/' + image
@@ -299,7 +301,8 @@ def performIndiviualTransformation(input_folder):
         #y = 1.2
         print(y1)
         #outputDirectory = './TransformedImages_Contrast_'+ str(y1) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Contrast_' + str(y1)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Contrast_' + str(
+            y1) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
             input_file = input_folder + '/' + image
@@ -317,7 +320,8 @@ def performIndiviualTransformation(input_folder):
         #y = -1.0
         print(y2)
         #outputDirectory = './TransformedImages_Shear_'+ str(y2) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Shear_' + str(y2)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Shear_' + str(
+            y2) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
             input_file = input_folder + '/' + image
@@ -332,7 +336,8 @@ def performIndiviualTransformation(input_folder):
     # Translation
     for x in xrange(10, 110, 10):
         #outputDirectory = './TransformedImages_Translation_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Translation_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+            groupNumber) + '/TransformedImages_Translation_' + str(x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
             input_file = input_folder + '/' + image
@@ -349,7 +354,8 @@ def performIndiviualTransformation(input_folder):
         #y = 1.5
         print(y3)
         #outputDirectory = './TransformedImages_Scale_'+ groupNumber + str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Scale_' + str(y3)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Scale_' + str(
+            y3) + '/'
         createFolder(outputDirectory)
 
         for image in candidate_image_list:
@@ -364,7 +370,8 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Averaging
     for x in xrange(3, 7, 1):
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Blur_Averaging_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+            groupNumber) + '/TransformedImages_Blur_Averaging_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 1
         for image in candidate_image_list:
@@ -379,7 +386,8 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Gaussian
     for x in xrange(3, 9, 2):
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Blur_Gaussian_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+            groupNumber) + '/TransformedImages_Blur_Gaussian_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 5
         for image in candidate_image_list:
@@ -394,7 +402,8 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Median
     for x in xrange(3, 7, 2):
-        outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Blur_Median_' + str(x)+'/'
+        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+            groupNumber) + '/TransformedImages_Blur_Median_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 8
         for image in candidate_image_list:
@@ -408,7 +417,8 @@ def performIndiviualTransformation(input_folder):
         params_value = params_value + 1
 
     #Blur - Bilateral filter
-    outputDirectory = '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/IndividualTransformations/TransformedImages_Blur_Bilateral_filter/'
+    outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+        groupNumber) + '/TransformedImages_Blur_Bilateral_filter/'
     createFolder(outputDirectory)
     params_value = 9
     for image in candidate_image_list:

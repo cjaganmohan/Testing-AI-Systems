@@ -163,22 +163,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     img_list = []
-    img_list.append(
-        '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp2_4289_4389/center/1479425660620933516.jpg')
-    print(img_list[0])
-
-    img1 = '/Users/Jagan/Desktop/1479425660620933516_Contrast_2.6.jpg'
-    img2 = '/Users/Jagan/Desktop/1479425660620933516_Contrast_2.0.jpg'
+    # img_list.append(
+    #     '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp2_4289_4389/center/1479425660620933516.jpg')
+    # print(img_list[0])
+    #
+    # img1 = '/Users/Jagan/Desktop/1479425660620933516_Contrast_2.6.jpg'
+    # img2 = '/Users/Jagan/Desktop/1479425660620933516_Contrast_2.0.jpg'
 
     input_img = cv2.imread(
-        '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Grp2_4289_4389/center/1479425660620933516.jpg')
+        '/home/jagan/Desktop/Rambo/2-way/Grp6/TestCase_2/1479425535099058605_TC_2_Grp6_Thres-0.1_Combination_2way.jpg')
 
-    df_test = pd.read_csv(
-        '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv',
-        usecols=['frame_id', 'predicted_angle'], index_col=None)
-    df_truth = pd.read_csv(
-        '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv',
-        usecols=['frame_id', 'ground_truth'], index_col=None)
+    # df_test = pd.read_csv(
+    #     '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv',
+    #     usecols=['frame_id', 'predicted_angle'], index_col=None)
+    # df_truth = pd.read_csv(
+    #     '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv',
+    #     usecols=['frame_id', 'ground_truth'], index_col=None)
 
     red = (255, 0, 0)
     blue = (0, 0, 255)
@@ -193,13 +193,13 @@ if __name__ == "__main__":
         #    print('%.2f seconds elapsed' % (i/20))
         # img = test_x[i, :, :, :].swapaxes(0, 2).swapaxes(0, 1)
 
-        #img = input_img.swapaxes(0, 2).swapaxes(0, 1)
+        # img = input_img.swapaxes(0, 2).swapaxes(0, 1)
         img = input_img.copy()
-        predicted_steers = df_test['predicted_angle'].loc[i]
-        actual_steers = df_truth['ground_truth'].loc[i]
+        # predicted_steers = df_test['predicted_angle'].loc[i]
+        # actual_steers = df_truth['ground_truth'].loc[i]
 
-        predicted_steers = 0.7617822890000001
-        actual_steers = -0.23568442
+        predicted_steers = -0.592813015  # predicted steering value for the original image #red color
+        actual_steers = -0.970133245  # 0.63473314
 
         print(predicted_steers)
         print(actual_steers)

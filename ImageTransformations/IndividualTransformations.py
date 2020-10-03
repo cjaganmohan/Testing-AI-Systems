@@ -1,5 +1,5 @@
 '''
-File to create Synthetic images -  Indiviual transformations
+File to create Synthetic images -  Individual transformations
 
 
 '''
@@ -196,7 +196,6 @@ def modify_contrast(img, params):
 
 def modify_shear(img, params):
     rows, cols, ch = img.shape
-    #factor = params*(-1.0) #Bug -- identified on 05/25/2020
     factor = params # Bug fix
     print(factor)
     M = np.float32([[1, factor, 0], [0, 1, 0]])
@@ -239,7 +238,7 @@ def modify_blur(img, params):
     return blur
 
 
-def performIndiviualTransformation(input_folder):
+def performIndiviualTransformation(input_folder, groupNumber):
     # candidate_image_list1 = [1479425660620933516, 1479425534498905778,
     #                         1479425619063583545, 1479425660020827157,
     #                         1479425535099058605, 1479425496442340584,
@@ -253,22 +252,23 @@ def performIndiviualTransformation(input_folder):
 
     # writing image to a folder
     fileExtension = '.jpg'
-    #img = cv2.imread(input_file_name)
-    groupNumber = 10
+    # img = cv2.imread(input_file_name)
+    # groupNumber = 8
+    print (groupNumber)
     candidate_image_list = []
+
+    output_dir = '/home/jagan/Desktop/Chauffeur/Single_Transformation/Grp'
 
     for file in natsorted(os.listdir(input_folder)):
         if not file.startswith(".") and file.endswith(".jpg"):
             candidate_image = file
-            #print(candidate_image)
+            # print(candidate_image)
             candidate_image_list.append(candidate_image)
 
-
-
-    #Brightness
-    for x in xrange(10,110,10):
-        #outputDirectory = './TransformedImages_Brightness_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+    # Brightness
+    for x in xrange(10, 110, 10):
+        # outputDirectory = './TransformedImages_Brightness_'+ str(x) + '_Group_'+groupNumber + '/center/'
+        outputDirectory = output_dir + str(
             groupNumber) + '/TransformedImages_Brightness_' + str(x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
@@ -283,7 +283,7 @@ def performIndiviualTransformation(input_folder):
     #Rotation
     for x in xrange(3,33,3):
         #outputDirectory = './TransformedImages_Rotation_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Rotation_' + str(
+        outputDirectory = output_dir + str(groupNumber) + '/TransformedImages_Rotation_' + str(
             x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
@@ -301,7 +301,7 @@ def performIndiviualTransformation(input_folder):
         #y = 1.2
         print(y1)
         #outputDirectory = './TransformedImages_Contrast_'+ str(y1) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Contrast_' + str(
+        outputDirectory = output_dir + str(groupNumber) + '/TransformedImages_Contrast_' + str(
             y1) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
@@ -320,7 +320,7 @@ def performIndiviualTransformation(input_folder):
         #y = -1.0
         print(y2)
         #outputDirectory = './TransformedImages_Shear_'+ str(y2) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Shear_' + str(
+        outputDirectory = output_dir + str(groupNumber) + '/TransformedImages_Shear_' + str(
             y2) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
@@ -336,7 +336,7 @@ def performIndiviualTransformation(input_folder):
     # Translation
     for x in xrange(10, 110, 10):
         #outputDirectory = './TransformedImages_Translation_'+ str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+        outputDirectory = output_dir + str(
             groupNumber) + '/TransformedImages_Translation_' + str(x) + '/'
         createFolder(outputDirectory)
         for image in candidate_image_list:
@@ -354,7 +354,7 @@ def performIndiviualTransformation(input_folder):
         #y = 1.5
         print(y3)
         #outputDirectory = './TransformedImages_Scale_'+ groupNumber + str(x) + '_Group_'+groupNumber + '/center/'
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(groupNumber) + '/TransformedImages_Scale_' + str(
+        outputDirectory = output_dir + str(groupNumber) + '/TransformedImages_Scale_' + str(
             y3) + '/'
         createFolder(outputDirectory)
 
@@ -370,7 +370,7 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Averaging
     for x in xrange(3, 7, 1):
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+        outputDirectory = output_dir + str(
             groupNumber) + '/TransformedImages_Blur_Averaging_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 1
@@ -386,7 +386,7 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Gaussian
     for x in xrange(3, 9, 2):
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+        outputDirectory = output_dir + str(
             groupNumber) + '/TransformedImages_Blur_Gaussian_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 5
@@ -402,7 +402,7 @@ def performIndiviualTransformation(input_folder):
 
     #Blur - Median
     for x in xrange(3, 7, 2):
-        outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+        outputDirectory = output_dir + str(
             groupNumber) + '/TransformedImages_Blur_Median_' + str(x) + '/'
         createFolder(outputDirectory)
         params_value = 8
@@ -417,7 +417,7 @@ def performIndiviualTransformation(input_folder):
         params_value = params_value + 1
 
     #Blur - Bilateral filter
-    outputDirectory = '/home/jagan/Desktop/Chauffeur/Grp' + str(
+    outputDirectory = output_dir + str(
         groupNumber) + '/TransformedImages_Blur_Bilateral_filter/'
     createFolder(outputDirectory)
     params_value = 9
@@ -434,7 +434,7 @@ def performIndiviualTransformation(input_folder):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input', type = str, help ='Path for input folder')
-    #parser.add_argument('--group', type = str, help = 'Group number')
+    parser.add_argument('--input', type=str, help='Path for input folder')
+    parser.add_argument('--group', type=str, help='Group number')
     args, unknown = parser.parse_known_args()
-    performIndiviualTransformation(args.input)
+    performIndiviualTransformation(args.input, args.group)

@@ -64,12 +64,6 @@ input_file_name = image_list[group]
 input_file_actual_steering_value = 'dummyValue'
 img = cv2.imread(input_file_name)
 
-print (img.shape)
-#print (img[440,350])
-#rows = 480
-#cols = 640
-
-
 def image_blur(img,blur):
     blur_type = blur[0]
     blur_value = int(blur[1])
@@ -93,10 +87,6 @@ def image_blur(img,blur):
         return bilateral_blur
 
 
-# def image_brightness_and_contrast(img, beta, alpha):
-#     adjusted_brightness_and_contrast = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
-#     return adjusted_brightness_and_contrast
-
 def image_brightness(img, param):
     if(param != 0):
         new_img = cv2.add(img, param)  # new_img = img*alpha + beta
@@ -113,20 +103,6 @@ def image_contrast(img, params):
     if(params == 0.0):
         return img
 
-
-# def image_rotation(img, rotating_angle):
-#     #print(img.shape)
-#     height_original_image = int(img.shape[0])
-#     width_original_image = int(img.shape[1])
-#     #print(rotating_angle)
-#     #rotating_angle = 0
-#     #print(rotating_angle)
-#     center_position_of_the_image = (width_original_image / 2, height_original_image / 2)
-#     scale = 1.0  # rotate a given image WHILE retaining the image size
-#     M = cv2.getRotationMatrix2D(center_position_of_the_image, rotating_angle, scale)
-#     rotated_image = cv2.warpAffine(img, M, (width_original_image, height_original_image))
-#     return rotated_image
-
 def image_rotation(img, params):
     if (params != 0):
         rows, cols, ch = img.shape
@@ -137,16 +113,6 @@ def image_rotation(img, params):
         return img
 
 
-# def image_scale(img, scale_percent):
-#     #print(img.shape, scale_percent)
-#     width = int(img.shape[1] * scale_percent / 100)  # img.shape --> height * width
-#     height = int(img.shape[0] * scale_percent / 100)
-#     scaled_image_dimension = (width, height)
-#     # resizing the image
-#     resized_image = cv2.resize(img, scaled_image_dimension, interpolation=cv2.INTER_AREA)
-#     #print(type(resized_image))
-#     return resized_image
-
 def image_scale(img, scale_percent):
     if(scale_percent != 0.0):
         new_img = cv2.resize(img, None, fx=scale_percent, fy=scale_percent, interpolation=cv2.INTER_CUBIC)
@@ -154,23 +120,6 @@ def image_scale(img, scale_percent):
     if(scale_percent == 0.0):
         return img
 
-# def image_shear(img, shearing_value):
-#     shear_type = shearing_value[0]
-#     shear = float(shearing_value[1])
-#     height_original_image = int(img.shape[0])
-#     width_original_image = int(img.shape[1])
-#     if(shear_type == 'HS'):
-#         M2 = np.float32([[1, shear, 0], [0, 1, 0]])
-#         #print(shear)
-#         h_shear_image = cv2.warpAffine(img, M2, (
-#         width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-#         return h_shear_image
-#     # if (shear_type == 'VS'):
-#     #     M2 = np.float32([[1, shear, 0], [0, 1, 0]])
-#     #     #print(shear)
-#     #     v_shear_image = cv2.warpAffine(img, M2, (
-#     #         width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-#     #     return v_shear_image
 
 def image_shear(img, params):
     if (params[1] != 0.0):
@@ -183,14 +132,6 @@ def image_shear(img, params):
     if (params[1] == 0.0):
         return img
 
-
-# def image_translation(img, translation):
-#     height_original_image = int(img.shape[0])
-#     width_original_image = int(img.shape[1])
-#     M1 = np.float32([[1, 0, translation], [0, 1, translation]])
-#     translated_image = cv2.warpAffine(img, M1, (
-#     width_original_image, height_original_image))  # 3rd argument -- size of the output image...
-#     return translated_image
 
 def image_translation(img, params):
     if(params != 0):

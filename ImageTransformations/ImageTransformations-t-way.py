@@ -140,7 +140,7 @@ def image_translation(img, params):
 def generate_tway_Transformation(imageDirectory,testFile,groupNumber):
     candidate_image_list=[]
 
-    output_dir='/Users/Jagan/Desktop/Trial/'
+    output_dir = '/home/jagan/Desktop/Rambo/2-way/'
 
     for file in natsorted(os.listdir(imageDirectory)):
         if not file.startswith(".") and file.endswith(".jpg"):
@@ -149,8 +149,8 @@ def generate_tway_Transformation(imageDirectory,testFile,groupNumber):
 
     input_test_file = testFile
 
-    #output_file = '/home/jagan/Desktop/Rambo_2-way_Grp' + str(group) +'.csv'
-    output_file = '/Users/Jagan/Desktop/dummy.csv'
+    # output_file = '/home/jagan/Desktop/Rambo_2-way_Grp' + str(group) +'.csv'
+    # output_file = '/home/jagan/Desktop/dummy.csv'
 
     print(input_test_file)
     #with open(input_test_file) as input_csv_file, open(output_file, 'wb') as output_csv_file:
@@ -209,8 +209,8 @@ def generate_tway_Transformation(imageDirectory,testFile,groupNumber):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--testData', type=str)
+    parser.add_argument('--imageSource', type=str)
     parser.add_argument('--testFile', type=str)
     parser.add_argument('--group', type=str)
     args, unknown = parser.parse_known_args()
-    generate_tway_Transformation(args.testData,args.testFile,args.group)
+    generate_tway_Transformation(args.imageSource, args.testFile, args.group)

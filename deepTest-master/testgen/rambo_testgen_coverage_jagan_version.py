@@ -121,7 +121,7 @@ class Model(object):
     def predict1(self, img, transform, params):
         img_path = 'test.jpg'
         misc.imsave(img_path, img)
-        img1 = load_img(img, grayscale=True, target_size=(192, 256))
+        img1 = load_img(img_path, grayscale=True, target_size=(192, 256))
         img1 = img_to_array(img1)
 
         if self.img0 is None:
@@ -180,7 +180,7 @@ class Model(object):
             total_neurons  = total_neurons1 + total_neurons2 + total_neurons3
 
             return covered_neurons, total_neurons, self.model.predict(X)[0][0],c1,t1,d1,c2,t2,d2,c3,t3,d3
-            #return 0, 0, self.model.predict(X)[0][0],rs1[0][0],rs2[0][0],rs3[0][0],0,0,0    
+            #return 0, 0, self.model.predict(X)[0][0],rs1[0][0],rs2[0][0],rs3[0][0],0,0,0
     
     def hard_reset(self):
         
@@ -271,36 +271,52 @@ def image_blur(img, params):
 def rambo_testgen_coverage(dataset_path):
     # seed_inputs1 = os.path.join(dataset_path, "hmb3/")
     # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
-    # seed_inputs2 = os.path.join(dataset_path, "center/")
-    # seed_labels2 = os.path.join(dataset_path, "final_evaluation.csv")
+    # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
+    # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
+    #
+    #
+    # model = Model("./final_model.hdf5", "./X_train_mean.npy")
 
     seed_inputs1 = os.path.join(dataset_path, "center/")
     seed_labels1 = os.path.join(dataset_path, "final_evaluation.csv")
     seed_inputs2 = os.path.join(dataset_path, "testData/")
     seed_labels2 = os.path.join(dataset_path, "testData/test_steering.csv")
 
-    
     model = Model("../models/final_model.hdf5", "../models/X_train_mean.npy")
+
     filelist1 = []
-    for file in sorted(os.listdir(seed_inputs1)):
-        if file.endswith(".jpg"):
-            filelist1.append(file)
+    for root, sub_dirs, files in os.walk(seed_inputs1):
+        for f in files:
+            if '.jpg' in f or '.png' in f:
+                filelist1.append((root,f))
+    filelist1.sort(key=lambda x: x[1])
 
-    filelist2 = []
-    for file in sorted(os.listdir(seed_inputs2)):
-        if file.endswith(".jpg"):
-            filelist2.append(file)
+    # for image in filelist1:
+    #     print(filelist1)
+    #
+    # print(filelist1[0][1])
+    # print(filelist1[2])
+    # print("now resetting filelist1")
+    # filelist1 = []
+    # for file in sorted(os.listdir(seed_inputs1)):
+    #     if file.endswith(".jpg"):
+    #         filelist1.append(file)
+    #
+    # filelist2 = []
+    # for file in sorted(os.listdir(seed_inputs2)):
+    #     if file.endswith(".jpg"):
+    #         filelist2.append(file)
+    #
+    # with open(seed_labels1, 'rb') as csvfile1:
+    #     label1 = list(csv.reader(csvfile1, delimiter=',', quotechar='|'))
+    # label1 = label1[1:]
+    #
+    # with open(seed_labels2, 'rb') as csvfile2:
+    #     label2 = list(csv.reader(csvfile2, delimiter=',', quotechar='|'))
+    # label2 = label2[1:]
+
     
-    with open(seed_labels1, 'rb') as csvfile1:
-        label1 = list(csv.reader(csvfile1, delimiter=',', quotechar='|'))
-    label1 = label1[1:]
-
-    with open(seed_labels2, 'rb') as csvfile2:
-        label2 = list(csv.reader(csvfile2, delimiter=',', quotechar='|'))
-    label2 = label2[1:]
-
-    
-    with open('result/rambo_test_images.csv', 'wb',0) as csvfile:
+    with open('result/rambo_rq2_70000_images_new.csv', 'wb',0) as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         # writer.writerow(['index', 'image', 'tranformation', 'param_name',
@@ -309,45 +325,60 @@ def rambo_testgen_coverage(dataset_path):
         #                  's2_covered', 's2_total','s2_detail',
         #                  's3_covered', 's3_total','s3_detail',
         #                  'y_hat','label'])
-
-        writer.writerow(['File name', 'covered_neurons', 'total_neurons',
-                         's1_covered', 's1_total','s1_detail',
-                         's2_covered', 's2_total','s2_detail',
-                         's3_covered', 's3_total','s3_detail',
-                         'y_hat'])
-
-        # Jagan code change starts
-        # seed input
-        # input_images = xrange(1, 1001)
-        # for i in input_images:
-        #     j = i * 5
-        #     csvrecord = []
-        for f in filelist1:
-            seed_image = cv2.imread(os.path.join(seed_inputs1, f))
-            #print (seed_image)
-            print(os.path.join(seed_inputs1, f))
+        writer.writerow(['image',  'y_hat', 'threshold', 'covered_neurons', 'total_neurons',
+                         's1_covered', 's1_total',
+                         's2_covered', 's2_total',
+                         's3_covered', 's3_total'
+                        ])
+            
+        
+        #seed input
+        input_images = xrange(2, 3)
+        for i in input_images:
+            #j = i * 5
+            j = i
             csvrecord = []
-            # seed_image = imread(os.path.join(seed_inputs1, filelist1[j - 2]))
-            new_covered, new_total, result, c1, t1, d1, c2, t2, d2, c3, t3, d3 = model.predict1(seed_image, None, None)
+            print("**********************  ", i, ",", j, ",", j - 2 , "  ******************")
 
-            # seed_image = imread(os.path.join(seed_inputs1, filelist1[j - 1]))
-            # new_covered, new_total, result, c1, t1, d1, c2, t2, d2, c3, t3, d3 = model.predict1(seed_image, None, None)
+            seed_image = imread(os.path.join(filelist1[j - 2][0], filelist1[j - 2][1]))
+            #seed_image = imread(os.path.join(seed_inputs1, filelist1[j-2]))
+            #seed_image = imread(os.path.join(seed_inputs1, filelist1[j]))
+            #print(os.path.join(seed_inputs1, filelist1[j-2]))
+            print(os.path.join(filelist1[j-2][0], filelist1[j-2][1]))
+            new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
 
-            # seed_image = imread(os.path.join(seed_inputs1, filelist1[j]))
-            # new_covered, new_total, result, c1, t1, d1, c2, t2, d2, c3, t3, d3 = model.predict1(seed_image, None, None)
 
-            # filename, ext = os.path.splitext(str(filelist1[j]))
+            print(new_covered, new_total, result,c1,t1,c2,t2,c3,t3)
 
+            seed_image = imread(os.path.join(filelist1[j-1][0], filelist1[j-1][1]))
+            #seed_image = imread(os.path.join(seed_inputs1, filelist1[j-1]))
+            #seed_image = imread(os.path.join(seed_inputs1, filelist1[j]))
+            #print(os.path.join(seed_inputs1, filelist1[j-1]))
+            print(os.path.join(filelist1[j-1][0], filelist1[j-1][1]))
+            new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
+            print(new_covered, new_total, result, c1, t1, c2, t2, c3, t3)
+
+            seed_image = imread(os.path.join(filelist1[j][0], filelist1[j][1]))
+            #seed_image = imread(os.path.join(seed_inputs1, filelist1[j]))
+            #print(os.path.join(seed_inputs1, filelist1[j]))
+            print(os.path.join(filelist1[j][0], filelist1[j][1]))
+            new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
+            print(new_covered, new_total, result, c1, t1, c2, t2, c3, t3)
+
+            filename, ext = os.path.splitext(str(filelist1[j]))
+            
             # if label1[j][0] != filename:
             #     print(filename + " not found in the label file")
             #     continue
+          
+            
 
             tempk = []
             for k in d1.keys():
                 if d1[k]:
                     tempk.append(k)
             tempk = sorted(tempk, key=lambda element: (element[0], element[1]))
-            # covered_detail1 = ';'.join(str(x) for x in tempk).replace(',', ':')
+            #covered_detail1 = ';'.join(str(x) for x in tempk).replace(',', ':')
             covered_detail1 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')
             tempk = []
             for k in d2.keys():
@@ -361,113 +392,41 @@ def rambo_testgen_coverage(dataset_path):
                 if d3[k]:
                     tempk.append(k)
             tempk = sorted(tempk, key=lambda element: (element[0], element[1]))
-            covered_detail3 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')
+            covered_detail3 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')       
 
-            writer.writerow([f,new_covered,new_total,
-                             c1,t1,covered_detail1,
-                             c2,t2,covered_detail2,
-                             c3,t3,covered_detail3,
-                             result])
+            #csvrecord.append(j-2)
+            csvrecord.append(str(filelist1[j][1]))
+            csvrecord.append(result)
+            # csvrecord.append('-')
+            # csvrecord.append('-')
+            # csvrecord.append('-')
+            csvrecord.append(model.threshold)
 
-            # csvrecord.append(j - 2)
-            # csvrecord.append(str(filelist1[j]))
-            # csvrecord.append('-')
-            # csvrecord.append('-')
-            # csvrecord.append('-')
-            # csvrecord.append(model.threshold)
-            #
-            # csvrecord.append(new_covered)
-            # csvrecord.append(new_total)
-            # csvrecord.append(c1)
-            # csvrecord.append(t1)
-            # csvrecord.append(covered_detail1)
-            # csvrecord.append(c2)
-            # csvrecord.append(t2)
-            # csvrecord.append(covered_detail2)
-            # csvrecord.append(c3)
-            # csvrecord.append(t3)
-            # csvrecord.append(covered_detail3)
-            #
-            # csvrecord.append(result)
-            # csvrecord.append(label1[j][1])
-            # print(csvrecord)
-            # writer.writerow(csvrecord)
+            csvrecord.append(new_covered)
+            csvrecord.append(new_total)
+            csvrecord.append(c1)
+            csvrecord.append(t1)
+            #csvrecord.append(covered_detail1)
+            csvrecord.append(c2)
+            csvrecord.append(t2)
+            #csvrecord.append(covered_detail2)
+            csvrecord.append(c3)
+            csvrecord.append(t3)
+            #csvrecord.append(covered_detail3)
+
+
+
+            #csvrecord.append(label1[j][1])
+            #print(csvrecord) #commented by Jagan
+
+            print(str(filelist1[j]))
+            #print(label1[j][1]) #ground truth
+            print(result)
+            print("-----------")
+            writer.writerow(csvrecord)
             model.hard_reset()
 
         print("seed input done")
-
-        # Jagan code change ends
-
-        # #seed input
-        # input_images = xrange(1, 1001)
-        # for i in input_images:
-        #     j = i * 5
-        #     csvrecord = []
-        #
-        #     seed_image = imread(os.path.join(seed_inputs1, filelist1[j-2]))
-        #     new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
-        #
-        #     seed_image = imread(os.path.join(seed_inputs1, filelist1[j-1]))
-        #     new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
-        #
-        #     seed_image = imread(os.path.join(seed_inputs1, filelist1[j]))
-        #     new_covered, new_total, result,c1,t1,d1,c2,t2,d2,c3,t3,d3 = model.predict1(seed_image,None,None)
-        #     filename, ext = os.path.splitext(str(filelist1[j]))
-        #
-        #     if label1[j][0] != filename:
-        #         print(filename + " not found in the label file")
-        #         continue
-        #
-        #
-        #
-        #     tempk = []
-        #     for k in d1.keys():
-        #         if d1[k]:
-        #             tempk.append(k)
-        #     tempk = sorted(tempk, key=lambda element: (element[0], element[1]))
-        #     #covered_detail1 = ';'.join(str(x) for x in tempk).replace(',', ':')
-        #     covered_detail1 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')
-        #     tempk = []
-        #     for k in d2.keys():
-        #         if d2[k]:
-        #             tempk.append(k)
-        #     tempk = sorted(tempk, key=lambda element: (element[0], element[1]))
-        #     covered_detail2 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')
-        #
-        #     tempk = []
-        #     for k in d3.keys():
-        #         if d3[k]:
-        #             tempk.append(k)
-        #     tempk = sorted(tempk, key=lambda element: (element[0], element[1]))
-        #     covered_detail3 = ';'.join("('" + str(x[0]) + "', " + str(x[1]) + ')' for x in tempk).replace(',', ':')
-        #
-        #     csvrecord.append(j-2)
-        #     csvrecord.append(str(filelist1[j]))
-        #     csvrecord.append('-')
-        #     csvrecord.append('-')
-        #     csvrecord.append('-')
-        #     csvrecord.append(model.threshold)
-        #
-        #     csvrecord.append(new_covered)
-        #     csvrecord.append(new_total)
-        #     csvrecord.append(c1)
-        #     csvrecord.append(t1)
-        #     csvrecord.append(covered_detail1)
-        #     csvrecord.append(c2)
-        #     csvrecord.append(t2)
-        #     csvrecord.append(covered_detail2)
-        #     csvrecord.append(c3)
-        #     csvrecord.append(t3)
-        #     csvrecord.append(covered_detail3)
-        #
-        #
-        #     csvrecord.append(result)
-        #     csvrecord.append(label1[j][1])
-        #     print(csvrecord)
-        #     writer.writerow(csvrecord)
-        #     model.hard_reset()
-        #
-        # print("seed input done")
         
         # #Translation
         #
@@ -1024,7 +983,7 @@ def rambo_testgen_coverage(dataset_path):
         #         print(csvrecord[:5])
         #         writer.writerow(csvrecord)
         #         model.hard_reset()
-        # print("all done")
+        print("all done")
 
 
 

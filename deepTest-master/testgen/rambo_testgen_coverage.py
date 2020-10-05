@@ -269,13 +269,21 @@ def image_blur(img, params):
 
 
 def rambo_testgen_coverage(dataset_path):
-    seed_inputs1 = os.path.join(dataset_path, "hmb3/")
-    seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
-    seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
-    seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
+    # seed_inputs1 = os.path.join(dataset_path, "hmb3/")
+    # seed_labels1 = os.path.join(dataset_path, "hmb3/hmb3_steering.csv")
+    # seed_inputs2 = os.path.join(dataset_path, "Ch2_001/center/")
+    # seed_labels2 = os.path.join(dataset_path, "Ch2_001/CH2_final_evaluation.csv")
+    #
+    #
+    # model = Model("./final_model.hdf5", "./X_train_mean.npy")
 
-    
-    model = Model("./final_model.hdf5", "./X_train_mean.npy")
+    seed_inputs1 = os.path.join(dataset_path, "center/")
+    seed_labels1 = os.path.join(dataset_path, "final_evaluation.csv")
+    seed_inputs2 = os.path.join(dataset_path, "testData/")
+    seed_labels2 = os.path.join(dataset_path, "testData/test_steering.csv")
+
+    model = Model("../models/final_model.hdf5", "../models/X_train_mean.npy")
+
     filelist1 = []
     for file in sorted(os.listdir(seed_inputs1)):
         if file.endswith(".jpg"):
@@ -371,7 +379,12 @@ def rambo_testgen_coverage(dataset_path):
 
             csvrecord.append(result)
             csvrecord.append(label1[j][1])
-            print(csvrecord)
+            #print(csvrecord) #commented by Jagan
+            print(j - 2)
+            print(str(filelist1[j]))
+            print(label1[j][1]) #ground truth
+            print(result)
+            print("-----------")
             writer.writerow(csvrecord)
             model.hard_reset()
 

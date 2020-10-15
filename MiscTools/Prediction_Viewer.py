@@ -171,7 +171,7 @@ if __name__ == "__main__":
     # img2 = '/Users/Jagan/Desktop/1479425660620933516_Contrast_2.0.jpg'
 
     input_img = cv2.imread(
-        '/home/jagan/Desktop/Rambo/2-way/Grp6/TestCase_2/1479425535099058605_TC_2_Grp6_Thres-0.1_Combination_2way.jpg')
+        '/home/jagan/Desktop/Rambo/2-way/Grp9/TestCase_100/1479425719031130839_TC_100_Grp9_Thres-0.1_Combination_2way.jpg')
 
     # df_test = pd.read_csv(
     #     '/Users/Jagan/Desktop/chauffer-deubgging/prediction-in-batches/Results/Subject-Image-Transformed-IndiviualTransformation/Grp2.csv',
@@ -197,9 +197,11 @@ if __name__ == "__main__":
         img = input_img.copy()
         # predicted_steers = df_test['predicted_angle'].loc[i]
         # actual_steers = df_truth['ground_truth'].loc[i]
+        output_dir = '/home/jagan/Dropbox/Self-driving-car-Results/Images/'
+        fileName_withExtension = 'Autumn_Grp_9_TC_100.jpg'
 
-        predicted_steers = -0.592813015  # predicted steering value for the original image #red color
-        actual_steers = -0.970133245  # 0.63473314
+        predicted_steers = -0.05902291  # predicted steering value for the original image # blue color
+        actual_steers = -0.37407798  # predicted value of the synthetic image # red color
 
         print(predicted_steers)
         print(actual_steers)
@@ -208,9 +210,11 @@ if __name__ == "__main__":
         draw_path_on(img, speed_ms, predicted_steers / 5.0, red)
         # pdb.set_trace()
         img = img.astype('u1')
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        # img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         cv2.imshow('t', img)
-
+        outputFileDestination = output_dir + fileName_withExtension
+        print(outputFileDestination)
+        cv2.imwrite(outputFileDestination, img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 

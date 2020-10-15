@@ -282,13 +282,14 @@ def rambo_testgen_coverage(dataset_path):
     seed_inputs2 = os.path.join(dataset_path, "testData/")
     seed_labels2 = os.path.join(dataset_path, "testData/test_steering.csv")
 
+    # model = Model("../models/final_model.hdf5", "../models/X_train_mean.npy")
     model = Model("../models/final_model.hdf5", "../models/X_train_mean.npy")
 
     filelist1 = []
-    for root, sub_dirs, files in os.walk(seed_inputs1):
+    for root, sub_dirs, files in os.walk(dataset_path):
         for f in files:
             if '.jpg' in f or '.png' in f:
-                filelist1.append((root,f))
+                filelist1.append((root, f))
     filelist1.sort(key=lambda x: x[1])
 
     # for image in filelist1:
@@ -325,11 +326,11 @@ def rambo_testgen_coverage(dataset_path):
         #                  's2_covered', 's2_total','s2_detail',
         #                  's3_covered', 's3_total','s3_detail',
         #                  'y_hat','label'])
-        writer.writerow(['image',  'y_hat', 'threshold', 'covered_neurons', 'total_neurons',
+        writer.writerow(['seed_image', 'predicted_value', 'threshold', 'covered_neurons', 'total_neurons',
                          's1_covered', 's1_total',
                          's2_covered', 's2_total',
                          's3_covered', 's3_total'
-                        ])
+                         ])
             
         
         #seed input

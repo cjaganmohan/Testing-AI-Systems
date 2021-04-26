@@ -19,6 +19,7 @@ from keras import backend as K
 from keras.models import model_from_json
 from ncoverage import NCoverage
 from scipy.misc import imread, imresize, imsave
+from natsort import natsorted, ns
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -264,7 +265,7 @@ def chauffeur_guided(dataset_path):
     # Baseline coverage starts
 
     #seed_inputs1 = '/home/jagan/Desktop/Rambo/Baseline/Grp2/'
-    seed_inputs1 = '/home/jagan/Desktop/Rambo/2-way/Grp2/TestCase_1'
+    seed_inputs1 = '/home/jagan/Desktop/Rambo/2-way/Grp2/TestCase_5'
     filelist1 = []
     for file in sorted(os.listdir(seed_inputs1)):
         if file.endswith(".jpg"):
@@ -346,34 +347,81 @@ def chauffeur_guided(dataset_path):
         Covered_Neurons_Baseline = covered
         Percentage_Covered_Baseline = p
         Total_Neurons_Baseline = total
-
-        print("baseline neuron coverage information ," + str(Covered_Neurons_Baseline) + "," + str(Total_Neurons_Baseline) + "," +
+        print(os.path.join(seed_inputs1, filelist1[j]))
+        print("baseline neuron coverage information :  Covered Neurons- " + str(Covered_Neurons_Baseline) + ", Total Neurons:  "+ str(Total_Neurons_Baseline) + ", Percentage covered: " +
               str(Percentage_Covered_Baseline))
     # baseline coverage ends
 
     # test image coverage starts
     #dataset_path = '/home/jagan/Desktop/Rambo/2-way/Grp2/TestCase_22'
-    test_inputs1 = dataset_path
-    testimage_list = []
-    for test_file in sorted(os.listdir(test_inputs1)):
-        if test_file.endswith(".jpg"):
-            testimage_list.append(test_file)
+    # test_inputs1 = dataset_path
+    # testimage_list = []
+    # for test_file in sorted(os.listdir(test_inputs1)):
+    #     if test_file.endswith(".jpg"):
+    #         testimage_list.append(test_file)
+    #
+    # print("Now running coverage for test image")
+    # input_images = xrange(2, 3)  # modified by Jagan
+    # for i in input_images:
+    #     j = i  # modified by Jagan
+    #     test_image = cv2.imread(os.path.join(test_inputs1, testimage_list[j]))
+    #     #test_image = cv2.imread(test_image_file)
+    #     print(os.path.join(test_inputs1, testimage_list[j]))
+    # if model.predict_fn(test_image, test=1):
+    #     print("Test image increases the coverage")
+    #     covered, total, p = model.predict_fn(test_image)
+    #     C = covered
+    #     T = total
+    #     P = p
+    #     print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(T) + ", Percentage covered: " + str(P))
+    # else:
+    #     print("Test image does not increase the  coverage")
+    #     C = covered
+    #     T = total
+    #     P = p
+    #     print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
+    #         T) + ", Percentage covered: " + str(P))
 
-    print("Now running coverage for test image")
-    input_images = xrange(2, 3)  # modified by Jagan
-    for i in input_images:
-        j = i  # modified by Jagan
-        test_image = cv2.imread(os.path.join(test_inputs1, testimage_list[j]))
-        #test_image = cv2.imread(test_image_file)
-    if model.predict_fn(test_image, test=1):
-        print("Test image increases the coverage")
-        covered, total, p = model.predict_fn(test_image)
-        C = covered
-        T = total
-        P = p
-        print("Revised coverage: " + "Covered Neurons:" + str(C) + "Total Neurons: " + str(T) + "Percentage covered: " + str(P))
-    else:
-        print("Test image does not increase the  coverage")
+    source_dir = '/home/jagan/Desktop/Rambo/2-way/Grp2/'
+    subdirs = [x[0] for x in os.walk((source_dir))]
+    subdirs = natsorted(subdirs)
+   #print(type(subdirs))
+
+    for d in subdirs:
+        if d <> source_dir:
+            print (d)
+            test_inputs1 = d
+            testimage_list = []
+            for test_file in sorted(os.listdir(test_inputs1)):
+                if test_file.endswith(".jpg"):
+                    testimage_list.append(test_file)
+
+            print("Now running coverage for test image, " + test_inputs1 )
+            input_images = xrange(2, 3)  # modified by Jagan
+            for i in input_images:
+                j = i  # modified by Jagan
+                test_image = cv2.imread(os.path.join(test_inputs1, testimage_list[j]))
+                # test_image = cv2.imread(test_image_file)
+                print(os.path.join(test_inputs1, testimage_list[j]))
+            if model.predict_fn(test_image, test=1):
+                print("Test image increases the coverage")
+                covered, total, p = model.predict_fn(test_image)
+                C = covered
+                T = total
+                P = p
+                print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
+                    T) + ", Percentage covered: " + str(P))
+            else:
+                print("Test image does not increase the  coverage")
+                C = covered
+                T = total
+                P = p
+                print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
+                    T) + ", Percentage covered: " + str(P))
+    print ("done")
+
+
+
 
     # jagan changes ends
     # load nc, generation, population

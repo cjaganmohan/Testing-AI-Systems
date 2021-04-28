@@ -325,8 +325,8 @@ def rambo_testgen_coverage(dataset_path, group_number, file_type, output_path):
     model = Model("./final_model.hdf5", "./X_train_mean.npy")
 
     # output_file information
-    csv_filename = 'Rambo-Coverage_2-way' + '_Group' + str(group_number) + '.csv'
-    txt_filename = 'Rambo-Coverage_2-way' '_Group' + str(group_number) + '.txt'
+    csv_filename = 'Rambo-Coverage_2-way-new' + '_Group' + str(group_number) + '.csv'
+    txt_filename = 'Rambo-Coverage_2-way-new' + '_Group' + str(group_number) + '.txt'
 
     save_console_output = str(output_path) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
@@ -483,7 +483,7 @@ def rambo_testgen_coverage(dataset_path, group_number, file_type, output_path):
 
                     print("transformed_image_coverage_completed")
                     print("--------- now for comparison ---------")
-                    print('Baseline:  ', Covered_Neurons_Baseline, ' t-way:  ', c1 + c2 + c3)
+                    print('Baseline:  ', Covered_Neurons_Baseline, ' synthetic_image_2-way:  ', c1 + c2 + c3)
 
                     print('CNN_1:', b1)
                     print('CNN_2:', b2)
@@ -528,7 +528,7 @@ def rambo_testgen_coverage(dataset_path, group_number, file_type, output_path):
                     covered1, total1, p1 = get_current_coverage(dict1)
                     covered2, total2, p2 = get_current_coverage(dict2)
                     covered3, total3, p3 = get_current_coverage(dict3)
-                    print('T-way image coverage:', c1, c2, c3)
+                    print('synthetic_image_2-way image coverage:', c1, c2, c3)
                     print('Revised cumulative coverage:   ', covered1, covered2, covered3)
 
                     csvrecord.append(covered1)
@@ -569,7 +569,7 @@ def rambo_testgen_coverage(dataset_path, group_number, file_type, output_path):
                         #
 
                     print("-----------")
-                print("t-way_testcase_ complete")
+                print("images_from_2-way_transformation_testcase_ complete")
         print("all done")
         print('---------------')
         print('Environment information: ', '  Backend - Theano: ', theano.__version__, '  Keras: ', keras.__version__)

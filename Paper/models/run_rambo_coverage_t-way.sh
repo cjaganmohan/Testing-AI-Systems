@@ -2,18 +2,18 @@
 
 slash="/"
 #3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-for group_number in 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
+for group_number in 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
   #group_number=7
   echo $group_number
   group='Grp'
   print $group$group_number
-  d='/home/jagan/Desktop/Rambo/2-way/Grp'$group_number
-  file_name='2-way'
+  d='/home/jagan/Desktop/Rambo/AllCombinations/2-way/Grp'$group_number
+  file_name='2-way_all_transformations_combinations'
   #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Coverage/Baseline/Grp'$group_number # to run test dataset
-  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/2-way/'
+  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/2-way_all_transformations_combinations/Grp'$group_number
   export KERAS_BACKEND=theano # changing the backend to Theano
-  python2 run_rambo_cumulative_coverage_test_suite.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
-
+  #python2 run_rambo_cumulative_coverage_test_suite.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
+  python2 run_rambo_coverage_per_test_case.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
   #  for d in $(find '/home/jagan/Desktop/Rambo/2-way/Grp'$group_number$slash -maxdepth 1 -type d | natsort); do
   #    file_name=$(basename $d) # to print the folder name --- https://stackoverflow.com/a/3362952
   #    #directory_name=$d
@@ -26,6 +26,7 @@ for group_number in 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
   #      export KERAS_BACKEND=theano # changing the backend to Theano
   #      #python2 run_rambo_coverage_working_version.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
   #      python2 run_rambo_cumulative_coverage_test_suite.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
+          #python2 run_rambo_coverage_per_test_case.py --dataset $d --group $group_number --file_type $file_name --output_path $output_destination
   #    fi
   #  done
 

@@ -101,8 +101,8 @@ class ChauffeurModel(object):
         else:
             cnn_ndict = self.nc_encoder.update_coverage(img1.reshape((1, 120, 320, 3)))
             cnn_covered_neurons, cnn_total_neurons, cnn_p = self.nc_encoder.curr_neuron_cov()
-            #return cnn_covered_neurons, cnn_total_neurons, cnn_p
-            return cnn_ndict, cnn_covered_neurons, cnn_total_neurons, cnn_p
+            return cnn_covered_neurons, cnn_total_neurons, cnn_p
+            #return cnn_ndict, cnn_covered_neurons, cnn_total_neurons, cnn_p
     # return predict_fn
 
 
@@ -282,7 +282,7 @@ def update_dict(dict1, covdict):
     return r
 
 
-def chauffeur_guided(dataset_path, baseline_dir, group_number):
+def chauffeur_guided(dataset_path, baseline_dir, output_dir, group_number):
     model_name = "cnn"
     image_size = (128, 128)
     threshold = 0.2
@@ -314,7 +314,7 @@ def chauffeur_guided(dataset_path, baseline_dir, group_number):
     csv_filename = 'Chauffeur_Cumulative_Coverage_Information_t-way_' + '_Group' + str(group_number) + '.csv'
     txt_filename = 'Chauffeur_Cumulative_Coverage_Information_t-way_' + '_Group' + str(group_number) + '.txt'
 
-    output_path = '/home/jagan/Dropbox/Self-driving-car-Results/Comparison/Chauffeur/'
+    output_path = output_dir
 
     save_console_output = str(output_path) + '/' + txt_filename
     sys.stdout = open(save_console_output, 'w')
@@ -361,7 +361,8 @@ def chauffeur_guided(dataset_path, baseline_dir, group_number):
             csvrecord = []
             image = cv2.imread(os.path.join(seed_inputs1, filelist1[j]))
             # image = cv2.imread(image_file)
-            neurons_baseline, covered, total, p = model.predict_fn(image)
+            #neurons_baseline, covered, total, p = model.predict_fn(image)
+            covered, total, p = model.predict_fn(image)
 
             Covered_Neurons_Baseline = covered
             Percentage_Covered_Baseline = p
@@ -372,7 +373,12 @@ def chauffeur_guided(dataset_path, baseline_dir, group_number):
                 Total_Neurons_Baseline) + ", Percentage covered: " +
                   str(Percentage_Covered_Baseline))
             print('Baseline coverage complete')
+            # print("---------------------------------------------------------------")
+            # print (type(neurons_baseline))
+            # baseline_covered, baseline_total, baseline_percentage_covered = get_current_coverage(neurons_baseline)
+            # print (baseline_covered)
             print("---------------------------------------------------------------")
+
             print()
 
             #writing to csv
@@ -402,77 +408,81 @@ def chauffeur_guided(dataset_path, baseline_dir, group_number):
                     if test_file.endswith(".jpg"):
                         testimage_list.append(test_file)
 
-                input_images = xrange(99, 100)  # modified by Jagan
+                input_images = xrange(2, 3)  # modified by Jagan
                 for i in input_images:
                     j = i  # modified by Jagan
                     csvrecord=[]
                     test_image = cv2.imread(os.path.join(test_inputs1, testimage_list[j]))
                     print("Now running coverage for test image, " + os.path.join(test_inputs1, testimage_list[j]))
 
-                    # new logic starts
-                    neurons_test_image, covered_test_image, total_test_image, p_test_image = model.predict_fn(test_image)
-                    # check if cumulative coverage is increased
-                    coverage_increased_bool = is_update_dict(neurons_baseline, neurons_test_image)
-                    print("transformed_image_coverage_completed")
-                    print("--------- now for comparison ---------")
-                    print('Baseline:  ', Covered_Neurons_Baseline, ' synthetic_image_2-way:  ', covered_test_image)
+                    # # new logic starts
+                    # neurons_test_image, covered_test_image, total_test_image, p_test_image = model.predict_fn(test_image)
+                    # # check if cumulative coverage is increased
+                    # print(type(neurons_baseline), type(neurons_test_image))
+                    # coverage_increased_bool = is_update_dict(neurons_baseline, neurons_test_image)
+                    # print("transformed_image_coverage_completed")
+                    # print("--------- now for comparison ---------")
+                    # print('Baseline:  ', Covered_Neurons_Baseline, ' synthetic_image_2-way:  ', covered_test_image)
+                    # baseline_covered, baseline_total, baseline_percentage_covered = get_current_coverage(
+                    #     neurons_baseline)
+                    # print(baseline_covered)
+                    #
+                    # print('CNN:', coverage_increased_bool)
+                    #
+                    # #print('Coverage increased')
+                    # print('CNN coverage increased by --', is_update_dict_count(neurons_baseline, neurons_test_image))
+                    # print('CNN coverage increased by --', is_update_dict_count(neurons_test_image, neurons_baseline))
+                    # # get cumulative coverage for output
+                    # bcovered1, btotal1, bp1 = get_current_coverage(neurons_baseline)
+                    #
+                    # print('Before update_ cumulative coverage:   ', bcovered1 )
+                    # # update cumulative coverage
+                    # update_dict(neurons_baseline, neurons_test_image)
+                    #
+                    #
+                    # # get cumulative coverage for output
+                    # covered1, total1, p1 = get_current_coverage(neurons_baseline)
+                    #
+                    # print('synthetic_image_2-way image coverage:', covered1,)
+                    # print('Revised cumulative coverage:   ', covered1)
+                    #
+                    # # new logic ends
 
-                    print('CNN:', coverage_increased_bool)
+                if model.predict_fn(test_image, test=1):
+                    print("Test image increases the coverage")
+                    covered, total, p = model.predict_fn(test_image)
+                    C = covered
+                    T = total
+                    P = p
+                    print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
+                        T) + ", Percentage covered: " + str(P))
 
-                    print('Coverage increased')
-                    print('CNN coverage increased by --', is_update_dict_count(neurons_baseline, neurons_test_image))
+                    # writing to CSV
+                    csvrecord.append(os.path.join(test_inputs1, testimage_list[j]))
+                    #csvrecord.append(model.threshold)
+                    csvrecord.append(C)
+                    csvrecord.append(T)
+                    csvrecord.append(P)
+                    print("---------------------------------------------------------------")
+                    writer.writerow(csvrecord)
 
-                    # get cumulative coverage for output
-                    bcovered1, btotal1, bp1 = get_current_coverage(neurons_baseline)
-
-                    print('Before update_ cumulative coverage:   ', bcovered1 )
-                    # update cumulative coverage
-                    update_dict(neurons_baseline, neurons_test_image)
-
-
-                    # get cumulative coverage for output
-                    covered1, total1, p1 = get_current_coverage(neurons_baseline)
-
-                    print('synthetic_image_2-way image coverage:', covered1,)
-                    print('Revised cumulative coverage:   ', covered1)
-
-                    # new logic ends
-
-                # if model.predict_fn(test_image, test=1):
-                #     print("Test image increases the coverage")
-                #     covered, total, p = model.predict_fn(test_image)
-                #     C = covered
-                #     T = total
-                #     P = p
-                #     print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
-                #         T) + ", Percentage covered: " + str(P))
-                #
-                #     # writing to CSV
-                #     csvrecord.append(os.path.join(test_inputs1, testimage_list[j]))
-                #     #csvrecord.append(model.threshold)
-                #     csvrecord.append(C)
-                #     csvrecord.append(T)
-                #     csvrecord.append(P)
-                #     print("---------------------------------------------------------------")
-                #     writer.writerow(csvrecord)
-                #
-                # else:
-                #     print("Test image does not increase the  coverage")
-                #     covered, total, p = model.predict_fn(test_image)
-                #     C = covered
-                #     T = total
-                #     P = p
-                #     print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
-                #         T) + ", Percentage covered: " + str(P))
-                #     # writing to CSV
-                #     csvrecord.append(os.path.join(test_inputs1, testimage_list[j]))
-                #     #csvrecord.append(model.threshold)
-                #     csvrecord.append(C)
-                #     csvrecord.append(T)
-                #     csvrecord.append(P)
-                #     csvrecord.append('-')
-                #     print("---------------------------------------------------------------")
-                #     writer.writerow(csvrecord)
+                else:
+                    print("Test image does not increase the  coverage")
+                    # covered, total, p = model.predict_fn(test_image)
+                    # C = covered
+                    # T = total
+                    # P = p
+                    print("Revised coverage - Covered Neurons: " + str(C) + ", Total Neurons: " + str(
+                        T) + ", Percentage covered: " + str(P))
+                    # writing to CSV
+                    csvrecord.append(os.path.join(test_inputs1, testimage_list[j]))
+                    #csvrecord.append(model.threshold)
+                    csvrecord.append(C)
+                    csvrecord.append(T)
+                    csvrecord.append(P)
+                    csvrecord.append('-')
+                    print("---------------------------------------------------------------")
+                    writer.writerow(csvrecord)
         print("done")
         # jagan changes ends
 
@@ -481,10 +491,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str)
     parser.add_argument('--baseline', type=str)
+    parser.add_argument('--output_destination', type=str)
     parser.add_argument('--group', type=str)
+
 
     args, unknown = parser.parse_known_args()
     print('Calling the Chauffeur model now ----- ')
-    print(args.dataset, args.baseline, args.group)
-    chauffeur_guided(args.dataset, args.baseline, args.group)
+    print(args.dataset, args.baseline, args.output_destination, args.group)
+    chauffeur_guided(args.dataset, args.baseline, args.output_destination, args.group)
 

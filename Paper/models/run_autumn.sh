@@ -9,9 +9,9 @@ do
   group='Grp'
   print $group$group_number
   #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Autumn/Results/TestDataset' # to run test dataset
-  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Autumn/Results/2-way/Grp'$group_number
+  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Conference/Autumn/Results/Single_Transformation/Grp'$group_number
 
-  for d in $(find '/home/jagan/Desktop/Autumn/2-way/Grp'$group_number$slash -maxdepth 1 -type d | natsort)
+  for d in $(find '/home/jagan/Desktop/Conference/Autumn/Single_Transformation/Grp'$group_number$slash -maxdepth 1 -type d | natsort)
 
   do
     file_name=$(basename $d)  # to print the folder name --- https://stackoverflow.com/a/3362952

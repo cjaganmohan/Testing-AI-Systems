@@ -2,17 +2,19 @@
 
 slash="/"
 
-for group_number in 15 16 17 18 19 20
+for group_number in 2 3 4 5 6 7
 do
   #group_number=7
   echo $group_number
   group='Grp'
-  print $group$group_number
+  echo $group$group_number
   #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/TestDataset' # to run test dataset
-  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/2-way/Grp'$group_number
+  #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/modified-order-prediction/Rambo/Results/2-way/Grp'$group_number
+  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/modified-order-prediction/Rambo/Results/Original/2-way/Grp'$group_number
 
+  #for d in $(find '/home/jagan/Desktop/Rambo/2-way/modified_order/Grp'$group_number$slash -maxdepth 1 -type d | natsort)
   for d in $(find '/home/jagan/Desktop/Rambo/2-way/Grp'$group_number$slash -maxdepth 1 -type d | natsort)
-
+  #for d in $(find '/home/jagan/Desktop/Conference/Rambo/Single_Transformation/Grp'$group_number$slash -maxdepth 1 -type d | natsort)
   do
     file_name=$(basename $d)  # to print the folder name --- https://stackoverflow.com/a/3362952
     #directory_name=$d

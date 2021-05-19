@@ -2,16 +2,16 @@
 
 slash="/"
 #3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-for group_number in 2 3 4 5 6; do
+for group_number in 17 18 19 20; do
   #group_number=7
   echo $group_number
   group='Grp'
   print $group$group_number
   #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Coverage/Baseline/Grp'$group_number # to run test dataset
-  #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/single_transformation_deepTest/Grp'$group_number
-  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/2-way_new/'
+  output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/single_transformation_deepTest/Grp'$group_number
+  #output_destination='/home/jagan/Dropbox/Self-driving-car-Results/Rambo/Results/Cumulative_Coverage/2-way_new/'
 
-  d='/home/jagan/Desktop/Rambo/2-way/Grp'$group_number
+  d='/home/jagan/Desktop/Rambo/Single_Transformation_Comparison/Grp'$group_number
   file_name='single_transformation_deepTest'
   echo $d
   echo $group_number

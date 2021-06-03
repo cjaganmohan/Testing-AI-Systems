@@ -3,7 +3,7 @@ My current research project -- testing autonomous vehicle systems
 
 In this project, we propose a combinatorial approach to testing DNN models, specifically DNN models used in autonomous driving systems.
 
-All experimental results is available for download at: https://tinyurl.com/y2s6qxeo
+All experimental results are publicly available at: https://tinyurl.com/y2s6qxeo
 
 Comparison experiments with deepTest - First, we measured the neuron coverage achieved by the seed image (baseline). Then, we measure the cumulative neuron coverage achieved by a test set generated
 using deepTest approach. Finally, we measure the cumulative neuron coverage achieved using the t-way test .
